@@ -1,3 +1,10 @@
+Library
+Temp
+*. pidb
+*. unityproj
+* .. sln
+*. userprefs
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
