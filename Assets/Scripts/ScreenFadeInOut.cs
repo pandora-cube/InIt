@@ -3,7 +3,8 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class ScreenFadeInOut : MonoBehaviour {
-	public float fadeSpeed = -1f;
+	public float fadeSpeed;
+    public float endOpacity;
 	SpriteRenderer[] spriteFadeList;
 
 	void Start() {
@@ -12,10 +13,10 @@ public class ScreenFadeInOut : MonoBehaviour {
 
 	void Update() {
 		foreach(SpriteRenderer sprite in spriteFadeList) {
-            float alpha = sprite.color.a + fadeSpeed * Time.deltaTime;
+            float opacity = sprite.color.a + fadeSpeed * Time.deltaTime;
 
-            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, alpha);
-            if(alpha < -0.5f)
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
+            if((fadeSpeed < 0f && opacity < endOpacity) || (fadeSpeed >= 0f && opacity > endOpacity))
                 SceneManager.LoadScene("Scenes/Main");
         }
 	}
