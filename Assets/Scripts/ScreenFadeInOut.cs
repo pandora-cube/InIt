@@ -3,36 +3,19 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class ScreenFadeInOut : MonoBehaviour {
-	public float fadeSpeed;
-    public float endOpacity;
-	SpriteRenderer[] spriteFadeList;
-
-	void Start() {
-		spriteFadeList = GetComponentsInChildren<SpriteRenderer>();
-	}
+	public float fadeSpeed;             // 페이드 속도
+    public float endOpacity;            // 페이드가 종료될 투명도값
 
 	void Update() {
-		foreach(SpriteRenderer sprite in spriteFadeList) {
-            float opacity = sprite.color.a + fadeSpeed * Time.deltaTime;
+        // 페이드가 적용될 스프라이트
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        // 페이드 진행 시간에 따른 투명도 값 계산
+        float opacity = sprite.color.a + fadeSpeed * Time.deltaTime;
 
-            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
-            if((fadeSpeed < 0f && opacity < endOpacity) || (fadeSpeed >= 0f && opacity > endOpacity))
-                SceneManager.LoadScene("Scenes/Main");
-        }
+        // 스프라이트에 투명도 적용
+        sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
+        // 페이드가 종료될 경우 Main Scene 실행
+        if((fadeSpeed < 0f && opacity < endOpacity) || (fadeSpeed >= 0f && opacity > endOpacity))
+            SceneManager.LoadScene("Scenes/Main");
 	}
-
-    void FadeStart() {
-        GameObject goEmpty = new GameObject("FadeObject");
-        goEmpty.AddComponent<ScreenFadeInOut>();
-
-        SpriteRenderer[] spriteList = GetComponentsInChildren<SpriteRenderer>();
-        foreach (SpriteRenderer sprite in spriteList) {
-            sprite.tag = "";
-            Collider2D[] col2DList = GetComponentsInChildren<Collider2D>();
-            foreach (Collider2D col2D in col2DList) {
-                col2D.enabled = false;
-            }
-        }
-        goEmpty.transform.position = transform.position;
-    }
 }
