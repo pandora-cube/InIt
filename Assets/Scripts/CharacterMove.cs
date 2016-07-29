@@ -86,7 +86,7 @@ public class CharacterMove : MonoBehaviour {
 
     void onCollisionEnter2D(Collision2D col) {
         /*
-         *  onCollisionEnter2D(Collision2d col)
+         *  onCollisionEnter2D(Collision2D col)
          *      이동 불가 처리
          *      특정 오브젝트와의 접촉 검사
          */

@@ -70,9 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CharacterMove.cs" />
+    <Compile Include="Assets\Scripts\Option.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Scenes\Main.cs" />
-    <Compile Include="Assets\Scripts\Scenes\Option.cs" />
     <Compile Include="Assets\Scripts\ScreenFadeInOut.cs" />
     <Compile Include="Assets\Scripts\zFoxDataPackString.cs" />
   </ItemGroup>
