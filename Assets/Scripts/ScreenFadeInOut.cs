@@ -14,8 +14,8 @@ public class ScreenFadeInOut : MonoBehaviour {
 
         // 스프라이트에 투명도 적용
         sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
-        // 페이드가 종료될 경우 Main Scene 실행
+        // 페이드 종료 콜백 호출
         if((fadeSpeed < 0f && opacity < endOpacity) || (fadeSpeed >= 0f && opacity > endOpacity))
-            SceneManager.LoadScene("Scenes/Main");
+            Camera.main.GetComponent<Intro>().FadeEnded();
 	}
 }

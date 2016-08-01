@@ -14,7 +14,7 @@ public class CharacterMove : MonoBehaviour {
     bool canmove = true;            // 캐릭터 이동 가능 여부
     int animIndex;                  // 애니메이션 재생 인덱스
     
-	void Start () {
+	void Start() {
         // 초기화
         backgroundWidth = GameObject.Find("Background").GetComponent<SpriteRenderer>().bounds.size.x;
         backgroundHeight = GameObject.Find("Background").GetComponent<SpriteRenderer>().bounds.size.y;
@@ -28,7 +28,7 @@ public class CharacterMove : MonoBehaviour {
         Debug.Log(string.Format("Camera: {0}, {1}", cameraWidth, cameraHeight));
 	}
 	
-	void Update () {
+	void Update() {
         /*
          *  CharacterMove.Update()
          *      캐릭터 이동
@@ -102,7 +102,7 @@ public class CharacterMove : MonoBehaviour {
         // 화면의 상하 검사
         if(bottom >= -backgroundHeight/2f && top <= backgroundHeight/2f)
             campos_moved.y = charpos.y;
-        // 화면 좌표와 캐릭터 좌표와 동기화
+        // 화면 좌표를 캐릭터 좌표와 동기화
         Camera.main.transform.position = new Vector3(campos_moved.x, campos_moved.y, campos_moved.z);
 	}
 
