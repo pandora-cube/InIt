@@ -13,6 +13,7 @@ public class CharacterMove : MonoBehaviour {
     Sprite standingSprite;          // 정지상태 스프라이트
     bool canmove = true;            // 캐릭터 이동 가능 여부
     int animIndex;                  // 애니메이션 재생 인덱스
+    string entrance = "";           // 현재 서있는 출입구의 이름
     
 	void Start() {
         // 초기화
@@ -88,36 +89,72 @@ public class CharacterMove : MonoBehaviour {
         }
         
         /* 화면 이동 */
-        Vector3 charpos = charspr.transform.position;       // 캐릭터의 좌표
-        Vector3 campos = Camera.main.transform.position;    // 화면의 좌표
-        Vector3 campos_moved = campos;                      // 화면의 이동될 좌표
-        float left = charpos.x - cameraWidth/2f;            // 화면의 왼쪽 끝
-        float right = charpos.x + cameraWidth/2f;           // 화면의 오른쪽 끝
-        float bottom = charpos.y - cameraHeight/2f;         // 화면의 아랫쪽 끝
-        float top = charpos.y + cameraHeight/2f;            // 화면의 윗쪽 끝
+        Vector3 charpos = charspr.transform.position;           // 캐릭터의 좌표
+        Vector3 campos = Camera.main.transform.position;        // 화면의 좌표
+        Vector3 campos_moved = campos;                          // 화면의 이동될 좌표
+        float left = charpos.x - cameraWidth/2f;                // 화면의 왼쪽 끝
+        float right = charpos.x + cameraWidth/2f;               // 화면의 오른쪽 끝
+        float bottom = charpos.y - cameraHeight/2f;             // 화면의 아랫쪽 끝
+        float top = charpos.y + cameraHeight/2f;                // 화면의 윗쪽 끝
+        float xdis_left = -backgroundWidth/2f - charpos.x;      // 맵의 왼쪽 끝과 캐릭터 x좌표의 거리
+        float xdis_right = backgroundWidth/2f - charpos.x;      // 맵의 오른쪽 끝과 캐릭터 x좌표의 거리
+        float ydis_bottom = -backgroundHeight/2f - charpos.y;   // 맵의 아랫쪽 끝과 캐릭터 y좌표의 거리
+        float ydis_top = backgroundHeight/2f - charpos.y;       // 맵의 윗쪽 끝과 캐릭터 y좌표의 거리
 
-        // 화면의 좌우 검사
+        // 화면의 좌우 영역이 맵 안쪽에 있는 경우
         if(left >= -backgroundWidth/2f && right <= backgroundWidth/2f)
             campos_moved.x = charpos.x;
-        // 화면의 상하 검사
+        // 맵 왼쪽으로 벗어난 경우
+        else if(Mathf.Abs(xdis_left) < Mathf.Abs(xdis_right))
+            campos_moved.x = -backgroundWidth/2f + cameraWidth/2f;
+        // 맵 오른쪽으로 벗어난 경우
+        else
+            campos_moved.x = backgroundWidth/2f - cameraWidth/2f;
+            
+        // 화면의 상하 영역이 맵 안쪽에 있는 경우
         if(bottom >= -backgroundHeight/2f && top <= backgroundHeight/2f)
             campos_moved.y = charpos.y;
+        // 맵 아랫쪽으로 벗어난 경우
+        else if(Mathf.Abs(ydis_bottom) < Mathf.Abs(ydis_top))
+            campos_moved.y = -backgroundHeight/2f + cameraHeight/2f;
+        // 맵 윗쪽으로 벗어난 경우
+        else
+            campos_moved.y = backgroundHeight/2f - cameraHeight/2f;
         // 화면 좌표를 캐릭터 좌표와 동기화
         Camera.main.transform.position = new Vector3(campos_moved.x, campos_moved.y, campos_moved.z);
 	}
 
-    void onCollisionEnter2D(Collision2D col) {
-        /*
-         *  onCollisionEnter2D(Collision2D col)
-         *      이동 불가 처리
-         *      특정 오브젝트와의 접촉 검사
-         */
+    void OnCollisionEnter2D(Collision2D col) {
+        SpriteRenderer charspr = GetComponent<SpriteRenderer>();
 
-        /* 이동 불가 처리 */
-        canmove = false;
+        // 출입구 영역으로 들어온 경우
+        if(col.gameObject.tag == "Entrance") {
+            // 출입구 오브젝트의 이름을 Split하여 정보를 얻음
+            // [0] 출입구 이름
+            // [1] 충돌한 출입구의 방향 (Outside or Inside)
+            string[] objInfo = col.gameObject.name.Split('/');
+            // 반대편 출입구 이름
+            entrance = objInfo[0] + "/" + ((objInfo[1] == "Outside") ? "Inside" : "Outside");
+            // 반대편 출입구 스프라이트
+            SpriteRenderer other = GameObject.Find(entrance).GetComponent<SpriteRenderer>();
 
-        /* 특정 오브젝트와의 접촉 검사 */
-        if(col.gameObject.name == "") {
+            // 반대편 출입구를 트리거로 처리
+            GameObject.Find(entrance).GetComponent<BoxCollider2D>().isTrigger = true;
+            // 캐릭터를 반대편 출입구로 이동
+            charspr.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, charspr.transform.position.z);
+            // 디버깅 메시지 출력
+            Debug.Log(string.Format("Entered to {0}", col.gameObject.name));
+            Debug.Log(string.Format("Moved to {0} ({1}, {2}, {3})", entrance, other.transform.position.x, other.transform.position.y, charspr.transform.position.z));
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col) {
+        // 출입구 영역에서 벗어난 경우
+        if(col.gameObject.tag == "Entrance") {
+            // 디버깅 메시지 출력
+            Debug.Log(string.Format("Exited from {0}", entrance));
+            // 트리거 처리 해제
+            col.GetComponent<BoxCollider2D>().isTrigger = false;
         }
     }
 }
