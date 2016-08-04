@@ -104,8 +104,7 @@ public class CharacterMove : MonoBehaviour {
         float ydis_bottom = backgroundPosY - backgroundHeight/2f - charpos.y;
         // 맵의 윗쪽 끝과 캐릭터 y좌표의 거리
         float ydis_top = backgroundPosY + backgroundHeight/2f - charpos.y;
-
-        Debug.Log(string.Format("{0} {1} ({2})", left, right, backgroundPosX));
+        
         // 화면의 좌우 영역이 맵 안쪽에 있는 경우
         if(left >= -backgroundWidth/2f && right <= backgroundWidth/2f)
             campos_moved.x = charpos.x;
@@ -130,6 +129,7 @@ public class CharacterMove : MonoBehaviour {
 	}
 
     void OnCollisionEnter2D(Collision2D col) {
+        // 캐릭터 스프라이트
         SpriteRenderer charspr = GetComponent<SpriteRenderer>();
 
         // 출입구 영역으로 들어온 경우
@@ -147,26 +147,6 @@ public class CharacterMove : MonoBehaviour {
             GameObject.Find(entrance).GetComponent<BoxCollider2D>().isTrigger = true;
             // 캐릭터를 반대편 출입구로 이동
             charspr.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, charspr.transform.position.z);
-
-            // 충돌한 출입구에 따른 개별적 처리
-            switch(col.gameObject.name) {
-                case "1F-2F/Outside":
-                    // 캐릭터의 위치 정보를 2층으로 업데이트
-                    SingleTone.Instance.charArea = "Background_2F";
-                    break;
-                case "1F-2F/Inside":
-                    // 캐릭터의 위치 정보를 1층으로 업데이트
-                    SingleTone.Instance.charArea = "Background_1F";
-                    break;
-                case "2F-3F/Outside":
-                    // 캐릭터의 위치 정보를 3층으로 업데이트
-                    SingleTone.Instance.charArea = "Background_3F";
-                    break;
-                case "2F-3F/Inside":
-                    // 캐릭터의 위치 정보를 2층으로 업데이트
-                    SingleTone.Instance.charArea = "Background_2F";
-                    break;
-            }
 
             // 맵 이동에 따른 배경 스프라이트 정보 갱신
             GetBackgroundStatus();
@@ -187,9 +167,29 @@ public class CharacterMove : MonoBehaviour {
         }
     }
 
+    string GetPlayerArea() {
+        // 캐릭터 좌표
+        Vector3 chrPos = GetComponent<SpriteRenderer>().transform.position;
+
+        foreach(SpriteRenderer spr in GameObject.FindObjectsOfType<SpriteRenderer>()) {
+            string[] sprInfo = spr.name.Split('_');
+            Vector3 sprPos = spr.transform.position;
+            Vector3 sprSize = spr.bounds.size;
+
+            // 캐릭터가 특정 배경 스프라이트의 영역 안에 있는 경우
+            if(sprInfo[0] == "Background" && sprInfo[1].Length > 0
+                && chrPos.x >= sprPos.x-sprSize.x/2f && chrPos.x <= sprPos.x+sprSize.x/2f
+                && chrPos.y >= sprPos.y-sprSize.y/2f && chrPos.y <= sprPos.y+sprSize.y/2f)
+                return spr.name;
+        }
+        return string.Empty;
+    }
+
     void GetBackgroundStatus() {
         // 배경 스프라이트 선택자
-        SpriteRenderer obj = GameObject.Find(SingleTone.Instance.charArea).GetComponent<SpriteRenderer>();
+        SpriteRenderer obj = GameObject.Find(GetPlayerArea()).GetComponent<SpriteRenderer>();
+
+        Debug.Log(string.Format("Current area is {0}", GetPlayerArea()));
 
         // 배경 스프라이트의 좌표를 구함
         backgroundPosX = obj.transform.position.x;
