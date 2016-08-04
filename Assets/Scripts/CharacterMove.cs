@@ -158,6 +158,14 @@ public class CharacterMove : MonoBehaviour {
                     // 캐릭터의 위치 정보를 1층으로 업데이트
                     SingleTone.Instance.charArea = "Background_1F";
                     break;
+                case "2F-3F/Outside":
+                    // 캐릭터의 위치 정보를 3층으로 업데이트
+                    SingleTone.Instance.charArea = "Background_3F";
+                    break;
+                case "2F-3F/Inside":
+                    // 캐릭터의 위치 정보를 2층으로 업데이트
+                    SingleTone.Instance.charArea = "Background_2F";
+                    break;
             }
 
             // 맵 이동에 따른 배경 스프라이트 정보 갱신
