@@ -6,6 +6,8 @@ public class CharacterMove : MonoBehaviour {
     public int animSpeed = 3;       // 애니메이션 재생 속도
     public Sprite[] runningSprites; // 달리기 스프라이트
     
+    float backgroundPosX;           // 배경의 X좌표
+    float backgroundPosY;           // 배경의 Y좌표
     float backgroundWidth;          // 배경의 두께
     float backgroundHeight;         // 배경의 높이
     float cameraWidth;              // 화면의 두께
@@ -16,8 +18,7 @@ public class CharacterMove : MonoBehaviour {
     
 	void Start() {
         // 초기화
-        backgroundWidth = GameObject.Find("Background").GetComponent<SpriteRenderer>().bounds.size.x;
-        backgroundHeight = GameObject.Find("Background").GetComponent<SpriteRenderer>().bounds.size.y;
+        GetBackgroundStatus();
         cameraHeight = 2f * Camera.main.orthographicSize;
         cameraWidth = cameraHeight * Camera.main.aspect;
         standingSprite = GetComponent<SpriteRenderer>().sprite;
@@ -88,37 +89,42 @@ public class CharacterMove : MonoBehaviour {
         }
         
         /* 화면 이동 */
-        Vector3 charpos = charspr.transform.position;           // 캐릭터의 좌표
-        Vector3 campos = Camera.main.transform.position;        // 화면의 좌표
-        Vector3 campos_moved = campos;                          // 화면의 이동될 좌표
-        float left = charpos.x - cameraWidth/2f;                // 화면의 왼쪽 끝
-        float right = charpos.x + cameraWidth/2f;               // 화면의 오른쪽 끝
-        float bottom = charpos.y - cameraHeight/2f;             // 화면의 아랫쪽 끝
-        float top = charpos.y + cameraHeight/2f;                // 화면의 윗쪽 끝
-        float xdis_left = -backgroundWidth/2f - charpos.x;      // 맵의 왼쪽 끝과 캐릭터 x좌표의 거리
-        float xdis_right = backgroundWidth/2f - charpos.x;      // 맵의 오른쪽 끝과 캐릭터 x좌표의 거리
-        float ydis_bottom = -backgroundHeight/2f - charpos.y;   // 맵의 아랫쪽 끝과 캐릭터 y좌표의 거리
-        float ydis_top = backgroundHeight/2f - charpos.y;       // 맵의 윗쪽 끝과 캐릭터 y좌표의 거리
+        Vector3 charpos = charspr.transform.position;                   // 캐릭터의 좌표
+        Vector3 campos = Camera.main.transform.position;                // 화면의 좌표
+        Vector3 campos_moved = campos;                                  // 화면의 이동될 좌표
+        float left = charpos.x - backgroundPosX - cameraWidth/2f;       // 화면의 왼쪽 끝
+        float right = charpos.x - backgroundPosX + cameraWidth/2f;      // 화면의 오른쪽 끝
+        float bottom = charpos.y - backgroundPosY - cameraHeight/2f;    // 화면의 아랫쪽 끝
+        float top = charpos.y - backgroundPosY + cameraHeight/2f;       // 화면의 윗쪽 끝
+        // 맵의 왼쪽 끝과 캐릭터 x좌표의 거리
+        float xdis_left = backgroundPosX - backgroundWidth/2f - charpos.x;
+        // 맵의 오른쪽 끝과 캐릭터 x좌표의 거리
+        float xdis_right = backgroundPosX + backgroundWidth/2f - charpos.x;
+        // 맵의 아랫쪽 끝과 캐릭터 y좌표의 거리
+        float ydis_bottom = backgroundPosY - backgroundHeight/2f - charpos.y;
+        // 맵의 윗쪽 끝과 캐릭터 y좌표의 거리
+        float ydis_top = backgroundPosY + backgroundHeight/2f - charpos.y;
 
+        Debug.Log(string.Format("{0} {1} ({2})", left, right, backgroundPosX));
         // 화면의 좌우 영역이 맵 안쪽에 있는 경우
         if(left >= -backgroundWidth/2f && right <= backgroundWidth/2f)
             campos_moved.x = charpos.x;
         // 맵 왼쪽으로 벗어난 경우
         else if(Mathf.Abs(xdis_left) < Mathf.Abs(xdis_right))
-            campos_moved.x = -backgroundWidth/2f + cameraWidth/2f;
+            campos_moved.x = backgroundPosX - backgroundWidth/2f + cameraWidth/2f;
         // 맵 오른쪽으로 벗어난 경우
         else
-            campos_moved.x = backgroundWidth/2f - cameraWidth/2f;
+            campos_moved.x = backgroundPosX + backgroundWidth/2f - cameraWidth/2f;
             
         // 화면의 상하 영역이 맵 안쪽에 있는 경우
         if(bottom >= -backgroundHeight/2f && top <= backgroundHeight/2f)
             campos_moved.y = charpos.y;
         // 맵 아랫쪽으로 벗어난 경우
         else if(Mathf.Abs(ydis_bottom) < Mathf.Abs(ydis_top))
-            campos_moved.y = -backgroundHeight/2f + cameraHeight/2f;
+            campos_moved.y = backgroundPosY - backgroundHeight/2f + cameraHeight/2f;
         // 맵 윗쪽으로 벗어난 경우
         else
-            campos_moved.y = backgroundHeight/2f - cameraHeight/2f;
+            campos_moved.y = backgroundPosY + backgroundHeight/2f - cameraHeight/2f;
         // 화면 좌표를 캐릭터 좌표와 동기화
         Camera.main.transform.position = new Vector3(campos_moved.x, campos_moved.y, campos_moved.z);
 	}
@@ -141,6 +147,22 @@ public class CharacterMove : MonoBehaviour {
             GameObject.Find(entrance).GetComponent<BoxCollider2D>().isTrigger = true;
             // 캐릭터를 반대편 출입구로 이동
             charspr.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, charspr.transform.position.z);
+
+            // 충돌한 출입구에 따른 개별적 처리
+            switch(col.gameObject.name) {
+                case "1F-2F/Outside":
+                    // 캐릭터의 위치 정보를 2층으로 업데이트
+                    SingleTone.Instance.charArea = "Background_2F";
+                    break;
+                case "1F-2F/Inside":
+                    // 캐릭터의 위치 정보를 1층으로 업데이트
+                    SingleTone.Instance.charArea = "Background_1F";
+                    break;
+            }
+
+            // 맵 이동에 따른 배경 스프라이트 정보 갱신
+            GetBackgroundStatus();
+
             // 디버깅 메시지 출력
             Debug.Log(string.Format("Entered into {0}", col.gameObject.name));
             Debug.Log(string.Format("Moved to {0} ({1}, {2}, {3})", entrance, other.transform.position.x, other.transform.position.y, charspr.transform.position.z));
@@ -155,5 +177,17 @@ public class CharacterMove : MonoBehaviour {
             // 트리거 처리 해제
             col.GetComponent<BoxCollider2D>().isTrigger = false;
         }
+    }
+
+    void GetBackgroundStatus() {
+        // 배경 스프라이트 선택자
+        SpriteRenderer obj = GameObject.Find(SingleTone.Instance.charArea).GetComponent<SpriteRenderer>();
+
+        // 배경 스프라이트의 좌표를 구함
+        backgroundPosX = obj.transform.position.x;
+        backgroundPosY = obj.transform.position.y;
+        // 배경 스프라이트의 너비와 높이를 구함
+        backgroundWidth = obj.bounds.size.x;
+        backgroundHeight = obj.bounds.size.y;
     }
 }
