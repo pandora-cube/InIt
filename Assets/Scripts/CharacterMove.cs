@@ -150,18 +150,12 @@ public class CharacterMove : MonoBehaviour {
 
             // 맵 이동에 따른 배경 스프라이트 정보 갱신
             GetBackgroundStatus();
-
-            // 디버깅 메시지 출력
-            Debug.Log(string.Format("Entered into {0}", col.gameObject.name));
-            Debug.Log(string.Format("Moved to {0} ({1}, {2}, {3})", entrance, other.transform.position.x, other.transform.position.y, charspr.transform.position.z));
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // 출입구 영역에서 벗어난 경우
         if(col.gameObject.tag == "Entrance") {
-            // 디버깅 메시지 출력
-            Debug.Log(string.Format("Exited from {0}", col.gameObject.name));
             // 트리거 처리 해제
             col.GetComponent<BoxCollider2D>().isTrigger = false;
         }
@@ -188,8 +182,6 @@ public class CharacterMove : MonoBehaviour {
     void GetBackgroundStatus() {
         // 배경 스프라이트 선택자
         SpriteRenderer obj = GameObject.Find(GetPlayerArea()).GetComponent<SpriteRenderer>();
-
-        Debug.Log(string.Format("Current area is {0}", GetPlayerArea()));
 
         // 배경 스프라이트의 좌표를 구함
         backgroundPosX = obj.transform.position.x;
