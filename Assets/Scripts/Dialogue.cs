@@ -3,13 +3,17 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Dialogue : MonoBehaviour {
-    public float printSpeed = 0.1f; // 메시지 출력 속도
+    public float printSpeed = 0.1f;     // 메시지 출력 속도
+    public float blinkSpeed;            // Blinker의 페이드 속도
+    public float blinkOpacity;          // Blinker의 최대 투명도
 
-    GameObject msgObj;              // 메시지 오브젝트
-    bool msgRight;                  // 메시지 출력 방향
-    string msgResult;               // 메시지 내용
-    int msgLength;                  // 메시지 길이
-    int msgCount;                   // 메시지 출력 카운트
+    GameObject msgObj;                  // 메시지 오브젝트
+    bool msgRight;                      // 메시지 출력 방향
+    string msgResult;                   // 메시지 내용
+    int msgLength;                      // 메시지 길이
+    int msgCount;                       // 메시지 출력 카운트
+    float blinkSpeedTmp;                // Blinker의 페이드 속도
+    float blinkOpacityTmp;              // Blinker의 최대 투명도
 
     void Start() {
         GameObject canvasObj = GameObject.Find("Dialogue UI").transform.FindChild("Canvas").gameObject;
@@ -17,6 +21,22 @@ public class Dialogue : MonoBehaviour {
         GameObject leftObj = canvasObj.transform.FindChild("Left").gameObject;
 
         rightObj.transform.localScale = leftObj.transform.localScale = new Vector3(0f, 0f, 0f);
+        
+        blinkSpeedTmp = blinkSpeed;
+        blinkOpacityTmp = blinkOpacity;
+    }
+
+    void Update() {
+        Text blinker = GameObject.Find("Dialogue UI").transform.FindChild("Canvas").transform.FindChild(msgRight ? "Right" : "Left").transform.FindChild("Blinker").GetComponent<Text>();
+        float opacity = blinker.color.a + blinkSpeedTmp * Time.deltaTime;
+        
+        blinker.color = new Color(blinker.color.r, blinker.color.g, blinker.color.b, opacity);
+        if(opacity >= blinkOpacityTmp && blinkSpeedTmp >= 0f) {
+            blinkSpeedTmp = -blinkSpeedTmp;
+            blinkOpacityTmp = 0f;
+        } else if(opacity <= 0f && blinkSpeedTmp <= 0f)
+            blinkSpeedTmp = -blinkSpeedTmp;
+            blinkOpacityTmp = blinkOpacity;
     }
 
     void PrintMessage() {
@@ -46,7 +66,7 @@ public class Dialogue : MonoBehaviour {
 
     public void ShowDialogue(string name, string result, bool isright=true) {
         GameObject uiObj = GameObject.Find("Dialogue UI");
-        msgObj = uiObj.transform.FindChild("Canvas").transform.FindChild((isright) ? "Right" : "Left").gameObject;
+        msgObj = uiObj.transform.FindChild("Canvas").transform.FindChild(isright ? "Right" : "Left").gameObject;
         
         msgObj.transform.FindChild("Name").GetComponent<Text>().text = name;
         msgObj.transform.localScale = new Vector3(1f, 1f, 1f);

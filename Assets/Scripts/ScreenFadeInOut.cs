@@ -16,6 +16,7 @@ public class ScreenFadeInOut : MonoBehaviour {
         sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
         // 페이드 종료 콜백 호출
         if((fadeSpeed < 0f && opacity < endOpacity) || (fadeSpeed >= 0f && opacity > endOpacity))
-            Camera.main.GetComponent<Intro>().FadeEnded();
+            foreach(Transform obj in GameObject.FindObjectsOfType<Transform>())
+                obj.SendMessage("FadeEnded", SendMessageOptions.DontRequireReceiver);
 	}
 }

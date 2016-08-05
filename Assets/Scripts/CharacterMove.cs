@@ -131,7 +131,7 @@ public class CharacterMove : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D col) {
         // 캐릭터 스프라이트
         SpriteRenderer charspr = GetComponent<SpriteRenderer>();
-        //GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("Test", "No result", false);
+        GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("Test", "No result", false);
 
         // 출입구 영역으로 들어온 경우
         if(col.gameObject.tag == "Entrance") {
