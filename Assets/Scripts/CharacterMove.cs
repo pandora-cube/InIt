@@ -5,6 +5,7 @@ public class CharacterMove : MonoBehaviour {
     public float moveSpeed = 3f;    // 이동 속도
     public int animSpeed = 3;       // 애니메이션 재생 속도
     public Sprite[] runningSprites; // 달리기 스프라이트
+    public bool canmove = true;     // 캐릭터 이동 가능 여부
     
     float backgroundPosX;           // 배경의 X좌표
     float backgroundPosY;           // 배경의 Y좌표
@@ -13,7 +14,6 @@ public class CharacterMove : MonoBehaviour {
     float cameraWidth;              // 화면의 두께
     float cameraHeight;             // 화면의 높이
     Sprite standingSprite;          // 정지상태 스프라이트
-    bool canmove = true;            // 캐릭터 이동 가능 여부
     int animIndex;                  // 애니메이션 재생 인덱스
     
 	void Start() {
@@ -151,8 +151,6 @@ public class CharacterMove : MonoBehaviour {
             // 맵 이동에 따른 배경 스프라이트 정보 갱신
             GetBackgroundStatus();
         }
-        else if(col.gameObject.tag == "NPC")
-            GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("거북이", "이곳에 내용이 출력됩니다.", false);
     }
 
     void OnTriggerExit2D(Collider2D col) {

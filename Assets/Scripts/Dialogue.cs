@@ -4,8 +4,9 @@ using System.Collections;
 
 public class Dialogue : MonoBehaviour {
     public float printSpeed = 0.1f;     // 메시지 출력 속도
-    public float blinkSpeed;            // Blinker의 페이드 속도
-    public float blinkOpacity;          // Blinker의 최대 투명도
+    public float blinkSpeed = 2f;       // Blinker의 페이드 속도
+    public float blinkOpacity = 1f;     // Blinker의 최대 투명도
+    public string[] Messages;           // 출력될 메시지
 
     GameObject msgObj;                  // 메시지 오브젝트
     bool msgRight;                      // 메시지 출력 방향
@@ -64,7 +65,7 @@ public class Dialogue : MonoBehaviour {
         msgResult = string.Empty;
     }
 
-    public void ShowDialogue(string name, string result, bool isright=true) {
+    public void ShowDialogue(string name, string result, bool isright=false) {
         GameObject uiObj = GameObject.Find("Dialogue UI");
         msgObj = uiObj.transform.FindChild("Canvas").transform.FindChild(isright ? "Right" : "Left").gameObject;
         
