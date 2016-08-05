@@ -21,4 +21,7 @@ public class SingleTone {
     public float volumeEffects = .5f;
     // 효과음 불륨 초기값
     public float volumeBGM = .5f;
+    
+    // 레벨 (NPC 대화 진행도)
+    public int Level = 0;
 }
