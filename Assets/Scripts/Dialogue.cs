@@ -7,12 +7,12 @@ public class Dialogue : MonoBehaviour {
     public float blinkSpeed = 2f;       // Blinker의 페이드 속도
     public float blinkOpacity = 1f;     // Blinker의 최대 투명도
     public string[] Messages;           // 출력될 메시지
+    public int msgCount = 0;            // 메시지 출력 카운트
 
     GameObject msgObj;                  // 메시지 오브젝트
     bool msgRight;                      // 메시지 출력 방향
     string msgResult;                   // 메시지 내용
     int msgLength;                      // 메시지 길이
-    int msgCount;                       // 메시지 출력 카운트
     float blinkSpeedTmp;                // Blinker의 페이드 속도
     float blinkOpacityTmp;              // Blinker의 최대 투명도
 
@@ -49,6 +49,8 @@ public class Dialogue : MonoBehaviour {
 
             // 메시지 출력이 완료된 경우
             if(msgCount++ == msgLength) {
+                // 카운트 초기화
+                msgCount = 0;
                 // 타이머 해제
                 CancelInvoke("PrintMessage");
             }
