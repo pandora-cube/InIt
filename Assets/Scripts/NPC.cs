@@ -30,6 +30,7 @@ public class NPC : MonoBehaviour {
         // 대화 UI
         Dialogue dialogue = GameObject.Find("Dialogue UI").GetComponent<Dialogue>();
         
+        // 대사가 출력중인 경우
         if(dialogue.msgCount != 0) {
         }
         // NPC가 대화를 거부하였거나 더 할 대사가 없는 경우
