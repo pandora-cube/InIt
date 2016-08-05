@@ -22,7 +22,6 @@ public class NPC : MonoBehaviour {
     }
 
     public void NPCTalk() {
-
         // 캐릭터 좌표
         Vector3 chrPos = GameObject.Find("Character").GetComponent<SpriteRenderer>().transform.position;
         // NPC 좌표
