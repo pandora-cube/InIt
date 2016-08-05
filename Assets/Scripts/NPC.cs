@@ -22,6 +22,7 @@ public class NPC : MonoBehaviour {
     }
 
     public void NPCTalk() {
+
         // 캐릭터 좌표
         Vector3 chrPos = GameObject.Find("Character").GetComponent<SpriteRenderer>().transform.position;
         // NPC 좌표
@@ -29,8 +30,10 @@ public class NPC : MonoBehaviour {
         // 대화 UI
         Dialogue dialogue = GameObject.Find("Dialogue UI").GetComponent<Dialogue>();
         
+        if(dialogue.msgCount != 0) {
+        }
         // NPC가 대화를 거부하였거나 더 할 대사가 없는 경우
-        if(messageIndex == -1 || messageIndex >= Messages.Length) {
+        else if(messageIndex == -1 || messageIndex >= Messages.Length) {
             // 캐릭터 이동 가능
             GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
             // 대화 UI 숨김
