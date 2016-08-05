@@ -75,8 +75,8 @@ public class Dialogue : MonoBehaviour {
         msgObj.transform.localScale = new Vector3(1f, 1f, 1f);
 
         msgRight = isright;
-        msgResult = result;
-        msgLength = result.Length;
+        msgResult = result.Replace("\\n", "\n");
+        msgLength = msgResult.Length;
         msgCount = 0;
         InvokeRepeating("PrintMessage", 0f, printSpeed);
     }
