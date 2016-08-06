@@ -40,6 +40,12 @@ public class Dialogue : MonoBehaviour {
             blinkOpacityTmp = blinkOpacity;
     }
 
+    public void OnClick() {
+        foreach(GameObject npc in GameObject.FindGameObjectsWithTag("NPC")) {
+            npc.GetComponent<NPC>().NPCTalk();
+        }
+    }
+
     void PrintMessage() {
         // 메시지 오브젝트와 내용이 존재하는 경우
         if(msgObj && msgResult.Length > 0) {
