@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class NPC : MonoBehaviour {
@@ -6,6 +7,7 @@ public class NPC : MonoBehaviour {
     public string Name;             // NPC의 이름
     public int Stage;               // 게임 진행 순차 중 이 NPC의 순번
     public string[] Messages;       // NPC의 대사 배열
+    public Sprite Poster;          // 포스터 스프라이트
     
     int messageIndex = 0;           // 대사 인덱스
     bool keyDowned = false;         // 키 눌림 여부
@@ -28,6 +30,8 @@ public class NPC : MonoBehaviour {
         Vector3 npcPos = GetComponent<SpriteRenderer>().transform.position;
         // 대화 UI
         Dialogue dialogue = GameObject.Find("Dialogue UI").GetComponent<Dialogue>();
+        // 포스터 이미지
+        Transform poster = dialogue.transform.FindChild("Canvas").FindChild("Poster");
         
         // 대사가 출력중인 경우
         if(dialogue.msgCount != 0) {
@@ -37,7 +41,9 @@ public class NPC : MonoBehaviour {
             // 캐릭터 이동 가능
             GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
             // 대화 UI 숨김
-            GameObject.Find("Dialogue UI").GetComponent<Dialogue>().HideDialogue();
+            dialogue.HideDialogue();
+            // 포스터 이미지 숨김
+            poster.localScale = new Vector3(0f, 0f, 0f);
             // 레벨 설정
             if(messageIndex != -1)
                 SingleTone.Instance.Level = Stage;
@@ -53,8 +59,17 @@ public class NPC : MonoBehaviour {
 
             // 이 NPC와 대화할 적정 단계인 경우
             if(SingleTone.Instance.Level == Stage-1) {
-                // 대화 UI 출력
-                dialogue.ShowDialogue(Name, Messages[messageIndex++]);
+                string message = Messages[messageIndex++];
+
+                // 포스터 이미지 출력 명령인 경우
+                if(message == "Poster") {
+                    // 포스터 이미지 출력
+                    poster.FindChild("Image").GetComponent<Image>().sprite = Poster;
+                    poster.localScale = new Vector3(1f, 1f, 1f);
+                } else {
+                    // 대화 UI 출력
+                    dialogue.ShowDialogue(Name, message);
+                }
             }
             // 플레이어의 진행도가 낮은 경우
             else if(SingleTone.Instance.Level < Stage-1) {
