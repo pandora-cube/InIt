@@ -67,7 +67,8 @@ public class Dialogue : MonoBehaviour {
 
     public void HideDialogue() {
         // 오브젝트 숨김
-        msgObj.transform.localScale = new Vector3(0f, 0f, 0f);
+        if(msgObj)
+            msgObj.transform.localScale = new Vector3(0f, 0f, 0f);
         // 타이머 강제 해제
         CancelInvoke("PrintMessage");
         // 초기화

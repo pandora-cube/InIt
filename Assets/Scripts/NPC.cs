@@ -7,7 +7,8 @@ public class NPC : MonoBehaviour {
     public string Name;             // NPC의 이름
     public int Stage;               // 게임 진행 순차 중 이 NPC의 순번
     public string[] Messages;       // NPC의 대사 배열
-    public Sprite Poster;          // 포스터 스프라이트
+    public Sprite Poster;           // 포스터 스프라이트
+    public bool dontChat = false;   // 대화 거부 등의 대사 수행 여부
     
     int messageIndex = 0;           // 대사 인덱스
     bool keyDowned = false;         // 키 눌림 여부
@@ -76,14 +77,20 @@ public class NPC : MonoBehaviour {
                 // 대화 거부 처리
                 messageIndex = -1;
                 // 대화 UI 출력
-                dialogue.ShowDialogue(Name, "나 말고 다른 사람한테 먼저 가봐.");
+                if(dontChat)
+                    NPCTalk();
+                else
+                    dialogue.ShowDialogue(Name, "나 말고 다른 사람한테 먼저 가봐.");
             }
             // 플레이어의 진행도가 높은 경우
             else if(SingleTone.Instance.Level > Stage-1) {
                 // 대화 거부 처리
                 messageIndex = -1;
                 // 대화 UI 출력
-                dialogue.ShowDialogue(Name, "난 이제 해 줄 말이 없어.");
+                if(dontChat)
+                    NPCTalk();
+                else
+                    dialogue.ShowDialogue(Name, "난 이제 해 줄 말이 없어.");
             }
         }
     }
