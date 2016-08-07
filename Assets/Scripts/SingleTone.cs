@@ -24,4 +24,7 @@ public class SingleTone {
     
     // 레벨 (NPC 대화 진행도)
     public int Level = 0;
+    
+    // 접촉한 NPC
+    public string collidedNPC = string.Empty;
 }

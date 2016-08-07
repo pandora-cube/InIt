@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class NPC : MonoBehaviour {
-    public float talkDistance = 1f; // 대화 가능한 최소 거리
     public string Name;             // NPC의 이름
     public int Stage;               // 게임 진행 순차 중 이 NPC의 순번
     public string[] Messages;       // NPC의 대사 배열
@@ -25,10 +24,6 @@ public class NPC : MonoBehaviour {
     }
 
     public void NPCTalk() {
-        // 캐릭터 좌표
-        Vector3 chrPos = GameObject.Find("Character").GetComponent<SpriteRenderer>().transform.position;
-        // NPC 좌표
-        Vector3 npcPos = GetComponent<SpriteRenderer>().transform.position;
         // 대화 UI
         Dialogue dialogue = GameObject.Find("Dialogue UI").GetComponent<Dialogue>();
         // 포스터 이미지
@@ -51,10 +46,9 @@ public class NPC : MonoBehaviour {
             // 대사 인덱스 초기화
             messageIndex = 0;
         }
-        // NPC와 대화 가능한 거리에 있는 경우
+        // NPC와 접촉해 있는 경우
         else if(Messages.Length > 0
-            && chrPos.x >= npcPos.x-talkDistance && chrPos.x <= npcPos.x+talkDistance
-            && chrPos.y >= npcPos.y-talkDistance && chrPos.y <= npcPos.y+talkDistance) {
+            && SingleTone.Instance.collidedNPC == transform.name) {
             // 캐릭터 이동 불가능
             GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
 
