@@ -16,7 +16,7 @@ public class Nametag : MonoBehaviour {
         Vector3 parentPosition = transform.position;
         // 네임태그의 좌표
         // 네임태그가 화면상 가장 앞에 오도록 Z좌표를 설정한다.
-        Vector3 tagPosition = new Vector3(transform.position.x, transform.position.y+tagOffset, -3f);
+        Vector3 tagPosition = new Vector3(parentPosition.x, parentPosition.y+tagOffset, -3f);
 
         // 네임태그 오브젝트 생성
 	    Object tag = Instantiate(Prefab, tagPosition, transform.rotation);

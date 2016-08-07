@@ -13,6 +13,13 @@ public class NPC : MonoBehaviour {
     bool keyDowned = false;         // 키 눌림 여부
 
     void Update() {
+        /*
+         *  NPC.Update()
+         *      대화 처리
+         *      레벨에 따른 네임태그 강조
+         */
+        
+        /* 대화 처리 */
         // Space 혹은 Enter 키를 누른 경우
         if(!keyDowned && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))) {
             keyDowned = true;
@@ -21,6 +28,18 @@ public class NPC : MonoBehaviour {
         // Space 혹은 Enter 키를 뗀 경우
         else if((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.KeypadEnter)))
             keyDowned = false;
+
+        /* 레벨에 따른 네임태그 강조 */
+        try {
+            // 다음 진행 상대가 이 NPC인 경우
+            if(Stage == SingleTone.Instance.Level+1) {
+                // 이 NPC의 네임태그 강조 처리
+                GetComponent<Nametag>().Blink = true;
+            } else {
+                // 네임태그 강조 해제
+                GetComponent<Nametag>().Blink = false;
+            }
+        } catch { }
     }
 
     public void NPCTalk() {
