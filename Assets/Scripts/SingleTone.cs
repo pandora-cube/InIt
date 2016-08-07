@@ -23,5 +23,5 @@ public class SingleTone {
     public float volumeBGM = .5f;
     
     // 레벨 (NPC 대화 진행도)
-    public int Level = 5;
+    public int Level = 0;
 }
