@@ -142,22 +142,12 @@ public class CharacterMove : MonoBehaviour {
             string entrance = objInfo[0] + "/" + ((objInfo[1] == "Outside") ? "Inside" : "Outside");
             // 반대편 출입구 스프라이트
             SpriteRenderer other = GameObject.Find(entrance).GetComponent<SpriteRenderer>();
-
-            // 반대편 출입구를 트리거로 처리
-            GameObject.Find(entrance).GetComponent<BoxCollider2D>().isTrigger = true;
+            
             // 캐릭터를 반대편 출입구로 이동
             charspr.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, charspr.transform.position.z);
 
             // 맵 이동에 따른 배경 스프라이트 정보 갱신
             GetBackgroundStatus();
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D col) {
-        // 출입구 영역에서 벗어난 경우
-        if(col.gameObject.tag == "Entrance") {
-            // 트리거 처리 해제
-            col.GetComponent<BoxCollider2D>().isTrigger = false;
         }
     }
 
