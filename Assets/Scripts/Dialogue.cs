@@ -21,7 +21,6 @@ public class Dialogue : MonoBehaviour {
         GameObject rightObj = canvasObj.transform.FindChild("Right").gameObject;
         GameObject leftObj = canvasObj.transform.FindChild("Left").gameObject;
         GameObject posterObj = canvasObj.transform.FindChild("Poster").gameObject;
-        GameObject posterImg = posterObj.transform.FindChild("Image").gameObject;
 
         rightObj.transform.localScale = leftObj.transform.localScale = posterObj.transform.localScale = new Vector3(0f, 0f, 0f);
         
