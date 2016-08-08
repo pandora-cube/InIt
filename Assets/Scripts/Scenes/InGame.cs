@@ -11,7 +11,6 @@ public class InGame : MonoBehaviour {
         Transform fader = GameObject.Find("Screen Fader").transform;
         
 	    if(Input.GetKeyDown(KeyCode.Escape)) {
-            Debug.Log("AAAA");
             // Screen Fader가 비활성화 되어 있는 경우
             if(fader.localScale == new Vector3(0f, 0f, 0f)) {
                 // Screen Fader를 투명하게 함
