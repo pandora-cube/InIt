@@ -5,7 +5,6 @@ public class InGame : MonoBehaviour {
     bool menuZoomIn = true;
 
     void Start() {
-        GameObject.Find("Screen Fader").transform.localScale = new Vector3(0f, 0f, 0f);
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
     }
     
@@ -13,7 +12,8 @@ public class InGame : MonoBehaviour {
         Transform fader = GameObject.Find("Screen Fader").transform;
         Transform menu = GameObject.Find("Menu UI").transform;
         
-	    if(Input.GetKeyDown(KeyCode.Escape)) {
+	    if(Input.GetKeyDown(KeyCode.Escape)
+            && GameObject.Find("Option UI").transform.localScale == new Vector3(0f, 0f, 0f)) {
             // Screen Fader가 비활성화 되어 있는 경우
             if(fader.localScale == new Vector3(0f, 0f, 0f)) {
                 // Screen Fader Fade In
@@ -42,15 +42,6 @@ public class InGame : MonoBehaviour {
             else
                 menu.position = new Vector3(menu.position.x, moved_y, menu.position.z);
         }
-
-        /*if(menu.localScale.x > 0f && menu.localScale.x != 1f) {
-            if(menuZoomIn) {
-                if(menu.localScale.x+Time.deltaTime >= 1f)
-                    menu.localScale = new Vector3(1f, 1f, 1f);
-                else
-                    menu.localScale = new Vector3(menu.localScale.x+2*Time.deltaTime, menu.localScale.y+2*Time.deltaTime, 1f);
-            }
-        }*/
 	}
 
     public void Resume() {
@@ -61,12 +52,5 @@ public class InGame : MonoBehaviour {
 
         // 캐릭터 이동 가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
-    }
-
-    void FadeEnded() {
-        float opacity = GameObject.Find("Screen Fader").GetComponent<SpriteRenderer>().color.a;
-        
-        if(opacity == 0f)
-            GameObject.Find("Screen Fader").transform.localScale = new Vector3(0f, 0f, 0f);
     }
 }

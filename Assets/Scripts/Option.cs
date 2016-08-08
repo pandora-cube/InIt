@@ -4,26 +4,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Option : MonoBehaviour {
-    GameObject[] arrObject;
-    float[] arrOpacity;
+    bool alreadyFaded = false;
 
     void Start() {
-        /*
-         *  Option.Start()
-         *      초기화
-         *      설정 값 동기화
-         */
-
-        /* 초기화 */
-        arrObject = GameObject.FindGameObjectsWithTag("Background");
-        arrOpacity = new float[arrObject.Length];
-        // 초기 상태의 투명도 값
-        for(int i = 0; i < arrObject.Length; i++) {
-            SpriteRenderer spr = arrObject[i].GetComponent<SpriteRenderer>();
-            arrOpacity[i] = spr.color.a;
-        }
-
-        /* 설정 값 동기화 */
         // BGM 불륨
         GameObject.Find("BGM Area").transform.FindChild("Slider").GetComponent<Slider>().value = SingleTone.Instance.volumeBGM;
         // 효과음 불륨
@@ -31,11 +14,16 @@ public class Option : MonoBehaviour {
     }
 
     public void Open() {
-        // 투명도 값을 초기 상태의 반으로 설정
-        for(int i = 0; i < arrObject.Length; i++) {
-            SpriteRenderer spr = arrObject[i].GetComponent<SpriteRenderer>();
-            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, arrOpacity[i]/2f);
-        }
+        Transform fader = GameObject.Find("Screen Fader").transform;
+        if(fader.localScale == new Vector3(0f, 0f, 0f)) {
+            // Fade Screen Fader In
+            fader.localScale = new Vector3(2048f, 2048f, 1f);
+            fader.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+            fader.GetComponent<ScreenFadeInOut>().endOpacity = .6f;
+
+            alreadyFaded = false;
+        } else
+            alreadyFaded = true;
         // Hide Menu UI
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
         // Show Option UI
@@ -43,10 +31,9 @@ public class Option : MonoBehaviour {
     }
 
     public void Close() {
-        // 투명도 값 복구
-        for(int i = 0; i < arrObject.Length; i++) {
-            SpriteRenderer spr = arrObject[i].GetComponent<SpriteRenderer>();
-            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, arrOpacity[i]);
+        if(!alreadyFaded) {
+            // Fade Screen Fader Out
+            GameObject.Find("Screen Fader").GetComponent<ScreenFadeInOut>().endOpacity = 0f;
         }
         // Show Menu UI
         GameObject.Find("Menu UI").transform.localScale = new Vector3(1f, 1f, 1f);
