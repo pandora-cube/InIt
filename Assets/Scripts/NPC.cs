@@ -21,12 +21,12 @@ public class NPC : MonoBehaviour {
         
         /* 대화 처리 */
         // Space 혹은 Enter 키를 누른 경우
-        if(!keyDowned && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))) {
+        if(!keyDowned && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))) {
             keyDowned = true;
             NPCTalk();
         }
         // Space 혹은 Enter 키를 뗀 경우
-        else if((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.KeypadEnter)))
+        else if((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return)))
             keyDowned = false;
 
         /* 레벨에 따른 네임태그 강조 */
