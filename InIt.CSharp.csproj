@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Nametag.cs" />
     <Compile Include="Assets\Scripts\Option.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Scenes\InGame.cs" />
     <Compile Include="Assets\Scripts\Scenes\Intro.cs" />
     <Compile Include="Assets\Scripts\Scenes\Main.cs" />
     <Compile Include="Assets\Scripts\ScreenFadeInOut.cs" />

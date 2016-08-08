@@ -12,11 +12,13 @@ public class ScreenFadeInOut : MonoBehaviour {
         // 페이드 진행 시간에 따른 투명도 값 계산
         float opacity = sprite.color.a + fadeSpeed * Time.deltaTime;
 
-        // 스프라이트에 투명도 적용
-        sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
         // 페이드 종료 콜백 호출
         if((fadeSpeed < 0f && opacity < endOpacity) || (fadeSpeed >= 0f && opacity > endOpacity))
             foreach(Transform obj in GameObject.FindObjectsOfType<Transform>())
                 obj.SendMessage("FadeEnded", SendMessageOptions.DontRequireReceiver);
+        else {
+            // 스프라이트에 투명도 적용
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, opacity);
+        }
 	}
 }
