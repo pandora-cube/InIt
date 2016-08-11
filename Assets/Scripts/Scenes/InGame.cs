@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class InGame : MonoBehaviour {
     void Start() {
+        SingleTone.Instance.Level = 0;
+
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
     }
     
@@ -51,5 +54,10 @@ public class InGame : MonoBehaviour {
 
         // 캐릭터 이동 가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
+    }
+
+
+    public void Quit() {
+		SceneManager.LoadScene("Scenes/Main");
     }
 }
