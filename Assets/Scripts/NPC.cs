@@ -10,7 +10,6 @@ public class NPC : MonoBehaviour {
     public bool dontChat = false;   // 대화 거부 등의 대사 수행 여부
     
     int messageIndex = 0;           // 대사 인덱스
-    bool keyDowned = false;         // 키 눌림 여부
 
     void Update() {
         /*
@@ -21,13 +20,9 @@ public class NPC : MonoBehaviour {
         
         /* 대화 처리 */
         // Space 혹은 Enter 키를 누른 경우
-        if(!keyDowned && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))) {
-            keyDowned = true;
+        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
             NPCTalk();
         }
-        // Space 혹은 Enter 키를 뗀 경우
-        else if((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return)))
-            keyDowned = false;
 
         /* 레벨에 따른 네임태그 강조 */
         try {
@@ -48,8 +43,11 @@ public class NPC : MonoBehaviour {
         // 포스터 이미지
         Transform poster = dialogue.transform.FindChild("Canvas").FindChild("Poster");
         
+        // 메뉴가 활성화되어 있는 경우
+        if(GameObject.Find("Menu UI").transform.localScale == new Vector3(1f, 1f, 1f)) {
+        }
         // 대사가 출력중인 경우
-        if(dialogue.msgCount != 0) {
+        else if(dialogue.msgCount != 0) {
         }
         // NPC가 대화를 거부하였거나 더 할 대사가 없는 경우
         else if(messageIndex == -1 || messageIndex >= Messages.Length) {

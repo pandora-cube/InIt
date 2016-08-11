@@ -7,7 +7,7 @@ public class ScreenFader : MonoBehaviour {
     public float endOpacity = 0.6f; // 페이드가 종료될 투명도값
 
 	void Start() {
-        transform.localScale = new Vector3(0f, 0f, 0f);
+        GameObject.Find("Screen Fader UI").transform.localScale = new Vector3(0f, 0f, 0f);
 	}
 
     void Update() {
@@ -23,7 +23,7 @@ public class ScreenFader : MonoBehaviour {
             fader.color = new Color(fader.color.r, fader.color.g, fader.color.b, endOpacity);
             // 투명도가 0인 경우 비활성화
             if(fader.color.a == 0f)
-                transform.localScale = new Vector3(0f, 0f, 0f);
+                GameObject.Find("Screen Fader UI").transform.localScale = new Vector3(0f, 0f, 0f);
         } else {
             // 투명도 적용
             fader.color = new Color(fader.color.r, fader.color.g, fader.color.b, opacity);

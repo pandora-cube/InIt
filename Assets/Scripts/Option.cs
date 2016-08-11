@@ -14,18 +14,17 @@ public class Option : MonoBehaviour {
     }
 
     public void Open() {
+        Transform faderui = GameObject.Find("Screen Fader UI").transform;
         Transform fader = GameObject.Find("Screen Fader").transform;
-        if(fader.localScale == new Vector3(0f, 0f, 0f)) {
+        if(faderui.localScale == new Vector3(0f, 0f, 0f)) {
             // Fade Screen Fader In
-            fader.localScale = new Vector3(1f, 1f, 1f);
+            faderui.localScale = new Vector3(1f, 1f, 1f);
             fader.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             fader.GetComponent<ScreenFader>().endOpacity = .6f;
 
             alreadyFaded = false;
         } else
             alreadyFaded = true;
-        // Option UI를 화면 최상위 레이어로 지정
-        transform.FindChild("Canvas").SetAsFirstSibling();
         // Show Option UI
         GameObject.Find("Option UI").transform.localScale = new Vector3(1f, 1f, 1f);
     }
