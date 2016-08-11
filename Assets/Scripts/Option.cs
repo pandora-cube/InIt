@@ -17,15 +17,15 @@ public class Option : MonoBehaviour {
         Transform fader = GameObject.Find("Screen Fader").transform;
         if(fader.localScale == new Vector3(0f, 0f, 0f)) {
             // Fade Screen Fader In
-            fader.localScale = new Vector3(2048f, 2048f, 1f);
-            fader.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
-            fader.GetComponent<ScreenFadeInOut>().endOpacity = .6f;
+            fader.localScale = new Vector3(1f, 1f, 1f);
+            fader.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+            fader.GetComponent<ScreenFader>().endOpacity = .6f;
 
             alreadyFaded = false;
         } else
             alreadyFaded = true;
-        // Hide Menu UI
-        GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
+        // Option UI를 화면 최상위 레이어로 지정
+        transform.FindChild("Canvas").SetAsFirstSibling();
         // Show Option UI
         GameObject.Find("Option UI").transform.localScale = new Vector3(1f, 1f, 1f);
     }
@@ -33,10 +33,8 @@ public class Option : MonoBehaviour {
     public void Close() {
         if(!alreadyFaded) {
             // Fade Screen Fader Out
-            GameObject.Find("Screen Fader").GetComponent<ScreenFadeInOut>().endOpacity = 0f;
+            GameObject.Find("Screen Fader").GetComponent<ScreenFader>().endOpacity = 0f;
         }
-        // Show Menu UI
-        GameObject.Find("Menu UI").transform.localScale = new Vector3(1f, 1f, 1f);
         // Hide Option UI
         GameObject.Find("Option UI").transform.localScale = new Vector3(0f, 0f, 0f);
     }

@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class InGame : MonoBehaviour {
-    bool menuZoomIn = true;
-
     void Start() {
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
     }
@@ -17,13 +16,12 @@ public class InGame : MonoBehaviour {
             // Screen Fader가 비활성화 되어 있는 경우
             if(fader.localScale == new Vector3(0f, 0f, 0f)) {
                 // Screen Fader Fade In
-                fader.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
-                fader.GetComponent<ScreenFadeInOut>().endOpacity = .6f;
+                fader.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+                fader.GetComponent<ScreenFader>().endOpacity = .6f;
                 // Screen Fader 활성화
-                fader.localScale = new Vector3(2048f, 2048f, 1f);
+                fader.localScale = new Vector3(1f, 1f, 1f);
                 
-                // Menu UI Zoom In
-                menuZoomIn = true;
+                // Menu UI 활성화
                 menu.localScale = new Vector3(1f, 1f, 1f);
                 menu.position = new Vector3(menu.position.x, 500f, menu.position.z);
 
@@ -46,7 +44,7 @@ public class InGame : MonoBehaviour {
 
     public void Resume() {
         // Screen Fader Fade Out
-        GameObject.Find("Screen Fader").GetComponent<ScreenFadeInOut>().endOpacity = 0f;
+        GameObject.Find("Screen Fader").GetComponent<ScreenFader>().endOpacity = 0f;
         // Menu UI 비활성화
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
 
