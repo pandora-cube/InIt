@@ -16,7 +16,8 @@ public class InGame : MonoBehaviour {
         Transform menu = GameObject.Find("Menu UI").transform;
         
 	    if(Input.GetKeyDown(KeyCode.Escape)
-            && GameObject.Find("Option UI").transform.localScale == new Vector3(0f, 0f, 0f)) {
+            && GameObject.Find("Option UI").transform.localScale == new Vector3(0f, 0f, 0f)
+            && GameObject.Find("Posters UI").transform.localScale == new Vector3(0f, 0f, 0f)) {
             // Screen Fader가 비활성화 되어 있는 경우
             if(faderui.localScale == new Vector3(0f, 0f, 0f)) {
                 // Screen Fader Fade In
@@ -55,7 +56,6 @@ public class InGame : MonoBehaviour {
         // 캐릭터 이동 가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
     }
-
 
     public void Quit() {
 		SceneManager.LoadScene("Scenes/Main");
