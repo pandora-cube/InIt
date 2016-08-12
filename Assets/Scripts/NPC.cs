@@ -10,12 +10,16 @@ public class NPC : MonoBehaviour {
     public bool dontChat = false;   // 대화 거부 등의 대사 수행 여부
 
     void Start() {
+        // 기존에 존재하던 충돌 처리 용도의 BoxCollider2D
+        BoxCollider2D original = GetComponent<BoxCollider2D>();
         // 대화 가능 영역 검사 용도의 Collider 생성
-        /*BoxCollider2D trigger = Component.Instantiate<BoxCollider2D>(GetComponent<BoxCollider2D>());
+        BoxCollider2D trigger = gameObject.AddComponent<BoxCollider2D>();
         // Trigger로 설정
         trigger.isTrigger = true;
-        // 영역을 충돌 처리 Collider보다 (1f, 1f) 크게 설정
-        trigger.size.Set(trigger.size.x+1f, trigger.size.y+1f);*/
+        // 영역을 충돌 처리 Collider보다 크게 설정
+        trigger.size = new Vector2(original.size.x+.1f, original.size.y+.1f);
+        // Offset을 원점으로 설정
+        trigger.offset = new Vector2(0f, 0f);
     }
 
     void Update() {

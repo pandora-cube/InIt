@@ -149,13 +149,15 @@ public class CharacterMove : MonoBehaviour {
             // 맵 이동에 따른 배경 스프라이트 정보 갱신
             GetBackgroundStatus();
         }
-        // NPC와 충돌한 경우
-        else if(col.gameObject.tag == "NPC") {
+    }
+
+    void OnTriggerEnter2D(Collider2D col) {
+        if(col.gameObject.tag == "NPC") {
             SingleTone.Instance.collidedNPC = col.gameObject.name;
         }
     }
 
-    void OnCollisionExit2D(Collision2D col) {
+    void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
         if(col.gameObject.tag == "NPC") {
             SingleTone.Instance.collidedNPC = string.Empty;
