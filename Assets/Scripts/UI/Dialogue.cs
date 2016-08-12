@@ -18,20 +18,25 @@ public class Dialogue : MonoBehaviour {
     float blinkOpacityTmp;              // Blinker의 최대 투명도
 
     void Start() {
-        uiObj = GameObject.Find("Dialogue UI").transform;
-        dialogueObj = uiObj.FindChild("Canvas").FindChild("Dialogue").transform;
-        posterObj = uiObj.FindChild("Canvas").FindChild("Poster").transform;
+        uiObj = GameObject.Find("Dialogue UI").transform;               // UI 오브젝트
+        dialogueObj = uiObj.FindChild("Canvas").FindChild("Dialogue");  // 메시지 오브젝트
+        posterObj = uiObj.FindChild("Canvas").FindChild("Poster");      // 포스터 오브젝트
 
-        uiObj.localScale = posterObj.localScale = new Vector3(0f, 0f, 0f);
+        // 오브젝트 숨김
+        uiObj.localScale = dialogueObj.localScale = posterObj.localScale = new Vector3(0f, 0f, 0f);
         
+        // blinkSpeed와 blinkOpacity가 가변성을 가지므로 미리 처음 값을 백업함
         blinkSpeedTmp = blinkSpeed;
         blinkOpacityTmp = blinkOpacity;
     }
 
     void Update() {
+        // Dialogue UI 우측 하단의 깜빡이
         Text blinker = dialogueObj.FindChild("Blinker").GetComponent<Text>();
+        // 시간에 따른 투명도
         float opacity = blinker.color.a + blinkSpeedTmp * Time.deltaTime;
         
+        // Blinker 투명도 설정
         blinker.color = new Color(blinker.color.r, blinker.color.g, blinker.color.b, opacity);
         if(opacity >= blinkOpacityTmp && blinkSpeedTmp >= 0f) {
             blinkSpeedTmp = -blinkSpeedTmp;
@@ -76,14 +81,17 @@ public class Dialogue : MonoBehaviour {
     }
 
     public void ShowDialogue(string name, string result) {
+        // 이름 텍스트 설정
         dialogueObj.FindChild("Name").GetComponent<Text>().text = name;
+        // Dialogue UI 활성화
         uiObj.localScale = dialogueObj.localScale =  new Vector3(1f, 1f, 1f);
         
-        msgResult = result.Replace("\\n", "\n");
-        msgLength = msgResult.Length;
-        msgCount = 0;
-        InvokeRepeating("PrintMessage", 0f, printSpeed);
+        msgResult = result.Replace("\\n", "\n");            // 줄바꿈 문자 변환
+        msgLength = msgResult.Length;                       // 메시지 길이
+        msgCount = 0;                                       // 메시지 출력 카운트 초기화
+        InvokeRepeating("PrintMessage", 0f, printSpeed);    // PrintMessage() 타이머 설정
 
+        //캐릭터 이동 불가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
     }
 }
