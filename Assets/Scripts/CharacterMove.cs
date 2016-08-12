@@ -46,46 +46,53 @@ public class CharacterMove : MonoBehaviour {
         SpriteRenderer charspr = GetComponent<SpriteRenderer>();
 
         /* 캐릭터 이동 */
-        Vector3 scale = transform.localScale;
-        scale.x = -Mathf.Abs(scale.x);
-        transform.localScale = scale;
+        float speedX, speedY;
+        speedX = speedY = 0f;
 
         // 좌향 이동
         if(Input.GetKey(KeyCode.LeftArrow)) {
             isrunning = true;
-            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
+            speedX -= moveSpeed;
             // 방향 처리
-            charspr.flipX = false;
+            charspr.flipX = true;
         }
         // 우향 이동
         if(Input.GetKey(KeyCode.RightArrow)) {
             isrunning = true;
-            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+            speedX += moveSpeed;
             // 방향 처리
-            charspr.flipX = true;
+            charspr.flipX = false;
         }
         // 상향 이동
         if(Input.GetKey(KeyCode.UpArrow)) {
             isrunning = true;
-            transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
+            speedY += moveSpeed;
         }
         // 하향 이동
         if(Input.GetKey(KeyCode.DownArrow)) {
             isrunning = true;
-            transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+            speedY -= moveSpeed;
         }
-        else
-            // 스프라이트 초기화
-            charspr.sprite = standingSprite;
         
         // 이동중인 경우
         if(isrunning) {
+            // 정지 해제
+            GetComponent<Rigidbody2D>().isKinematic = false;
+            // 속도 처리
+            GetComponent<Rigidbody2D>().velocity = new Vector3(speedX, speedY, 0f);
+
             // 달리기 애니메이션 인덱스 처리
             animIndex++;
             if(animIndex/animSpeed >= runningSprites.Length)
                 animIndex = 0;
             // 달리기 스프라이트 이미지로 전환
             charspr.sprite = runningSprites[animIndex/animSpeed];
+        } else {
+            // 정지
+            GetComponent<Rigidbody2D>().isKinematic = true;
+
+            // 스프라이트 초기화
+            charspr.sprite = standingSprite;
         }
         
         /* 화면 이동 */
