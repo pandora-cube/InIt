@@ -51,12 +51,8 @@ public class NPC : MonoBehaviour {
         }
         // NPC가 대화를 거부하였거나 더 할 대사가 없는 경우
         else if(messageIndex == -1 || messageIndex >= Messages.Length) {
-            // 캐릭터 이동 가능
-            GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
             // 대화 UI 숨김
             dialogue.HideDialogue();
-            // 포스터 이미지 숨김
-            poster.localScale = new Vector3(0f, 0f, 0f);
             // 레벨 설정
             if(messageIndex != -1)
                 SingleTone.Instance.Level = Stage;
@@ -66,9 +62,6 @@ public class NPC : MonoBehaviour {
         // NPC와 접촉해 있는 경우
         else if(Messages.Length > 0
             && SingleTone.Instance.collidedNPC == transform.name) {
-            // 캐릭터 이동 불가능
-            GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
-
             // 이 NPC와 대화할 적정 단계인 경우
             if(SingleTone.Instance.Level == Stage-1) {
                 string message = Messages[messageIndex++];
