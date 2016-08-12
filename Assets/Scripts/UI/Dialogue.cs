@@ -47,9 +47,7 @@ public class Dialogue : MonoBehaviour {
     }
 
     public void OnClick() {
-        foreach(GameObject npc in GameObject.FindGameObjectsWithTag("NPC")) {
-            npc.GetComponent<NPC>().NPCTalk();
-        }
+        GameObject.Find(SingleTone.Instance.collidedNPC).GetComponent<NPC>().NPCTalk();
     }
 
     void PrintMessage() {

@@ -60,8 +60,7 @@ public class NPC : MonoBehaviour {
             messageIndex = 0;
         }
         // NPC와 접촉해 있는 경우
-        else if(Messages.Length > 0
-            && SingleTone.Instance.collidedNPC == transform.name) {
+        else if(Messages.Length > 0) {
             // 이 NPC와 대화할 적정 단계인 경우
             if(SingleTone.Instance.Level == Stage-1) {
                 string message = Messages[messageIndex++];
