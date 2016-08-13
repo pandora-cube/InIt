@@ -83,7 +83,6 @@
     <Compile Include="Assets\Scripts\UI\Option.cs" />
     <Compile Include="Assets\Scripts\UI\Posters.cs" />
     <Compile Include="Assets\Scripts\UI\ScreenFader.cs" />
-    <Compile Include="Assets\Scripts\zFoxDataPackString.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
