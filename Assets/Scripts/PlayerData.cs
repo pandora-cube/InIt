@@ -20,7 +20,7 @@ public class PlayerData {
     }
     public static OPTION Option = new OPTION();
 
-    public static bool flagLoadPlayerData = false;
+    public static bool flagLoadPlayerData = true;
     public static string collidedNPC = string.Empty;
 
 	public static void SavePlayerData() {
@@ -31,6 +31,8 @@ public class PlayerData {
         bf.Serialize(ms, Player);
         // 문자열로 변환하여 저장
         PlayerPrefs.SetString("PlayerData", Convert.ToBase64String(ms.GetBuffer()));
+
+        GameObject.Find("SaveMessage UI").transform.localScale = new Vector3(1f, 1f, 1f);
 
         Debug.Log("저장");
     }

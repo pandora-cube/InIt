@@ -7,7 +7,7 @@ public class InGame : MonoBehaviour {
     void Start() {
         PlayerData.Player.Level = 0;
 
-        GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
+        GameObject.Find("Menu UI").transform.localScale = GameObject.Find("SaveMessage UI").transform.localScale = new Vector3(0f, 0f, 0f);
 
         if(PlayerData.flagLoadPlayerData)
             PlayerData.LoadPlayerData();
@@ -67,5 +67,9 @@ public class InGame : MonoBehaviour {
 
     public void Quit() {
 		SceneManager.LoadScene("Scenes/Main");
+    }
+
+    public void SaveMessage_Hide() {
+        GameObject.Find("SaveMessage UI").transform.localScale = new Vector3(0f, 0f, 0f);
     }
 }
