@@ -31,6 +31,8 @@ public class PlayerData {
         bf.Serialize(ms, Player);
         // 문자열로 변환하여 저장
         PlayerPrefs.SetString("PlayerData", Convert.ToBase64String(ms.GetBuffer()));
+
+        Debug.Log("저장");
     }
 
     public static void LoadPlayerData() {
