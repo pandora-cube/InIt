@@ -9,7 +9,8 @@ public class InGame : MonoBehaviour {
 
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
 
-        PlayerData.LoadPlayerData();
+        if(PlayerData.flagLoadPlayerData)
+            PlayerData.LoadPlayerData();
     }
     
 	void Update() {

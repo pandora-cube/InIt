@@ -169,14 +169,14 @@ public class CharacterMove : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col) {
         if(col.gameObject.tag == "NPC") {
-            PlayerData.Player.collidedNPC = col.gameObject.name;
+            PlayerData.collidedNPC = col.gameObject.name;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
         if(col.gameObject.tag == "NPC") {
-            PlayerData.Player.collidedNPC = string.Empty;
+            PlayerData.collidedNPC = string.Empty;
         }
     }
 

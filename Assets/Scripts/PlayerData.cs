@@ -10,8 +10,6 @@ public class PlayerData {
     public class PLAYER {
         public int Level = 0;
         public float[] Position = { 0f };
-
-        public string collidedNPC = string.Empty;
     }
     public static PLAYER Player = new PLAYER();
     
@@ -21,6 +19,9 @@ public class PlayerData {
         public float volumeBGM = .5f;
     }
     public static OPTION Option = new OPTION();
+
+    public static bool flagLoadPlayerData = false;
+    public static string collidedNPC = string.Empty;
 
 	public static void SavePlayerData() {
         BinaryFormatter bf = new BinaryFormatter();
@@ -33,6 +34,7 @@ public class PlayerData {
     }
 
     public static void LoadPlayerData() {
+        Debug.Log("불러오기");
         try {
             /* 데이터 불러오기 */
             // 문자열 데이터 불러옴

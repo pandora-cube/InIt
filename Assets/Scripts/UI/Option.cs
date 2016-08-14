@@ -17,7 +17,7 @@ public class Option : MonoBehaviour {
         Transform faderui = GameObject.Find("Screen Fader UI").transform;
         Transform fader = GameObject.Find("Screen Fader").transform;
         if(faderui.localScale == new Vector3(0f, 0f, 0f)) {
-            // Fade Screen Fader In
+            // Screen Fader Fade In
             faderui.localScale = new Vector3(1f, 1f, 1f);
             fader.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             fader.GetComponent<ScreenFader>().endOpacity = .6f;
@@ -31,7 +31,7 @@ public class Option : MonoBehaviour {
 
     public void Close() {
         if(!alreadyFaded) {
-            // Fade Screen Fader Out
+            // Screen Fader Fade Out
             GameObject.Find("Screen Fader").GetComponent<ScreenFader>().endOpacity = 0f;
         }
         // Hide Option UI
