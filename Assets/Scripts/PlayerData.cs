@@ -36,7 +36,6 @@ public class PlayerData {
     }
 
     public static void LoadPlayerData() {
-        Debug.Log("불러오기");
         try {
             /* 데이터 불러오기 */
             // 문자열 데이터 불러옴
@@ -54,6 +53,10 @@ public class PlayerData {
 
             /* 데이터 적용 */
             GameObject.Find("Character").transform.position = new Vector3(Player.Position[0], Player.Position[1], Player.Position[2]);
-        } catch { }
+
+            Debug.Log("불러오기 성공");
+        } catch {
+            Debug.Log("불러오기 실패");
+        }
     }
 }
