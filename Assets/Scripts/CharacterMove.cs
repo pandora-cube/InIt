@@ -37,8 +37,10 @@ public class CharacterMove : MonoBehaviour {
          */
         
         // 이동 불가능한 경우
-        if(!canmove)
+        if(!canmove) {
+            GetComponent<Rigidbody2D>().isKinematic = true;
             return;
+        }
 
         // 이동중 여부 체크 변수
         bool isrunning = false;

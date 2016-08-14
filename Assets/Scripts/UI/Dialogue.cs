@@ -188,7 +188,7 @@ public class Dialogue : MonoBehaviour {
         msgCount = 0;                                       // 메시지 출력 카운트 초기화
         InvokeRepeating("PrintMessage", 0f, printSpeed);    // PrintMessage() 타이머 설정
 
-        //캐릭터 이동 불가능
+        // 캐릭터 이동 불가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
     }
 }
