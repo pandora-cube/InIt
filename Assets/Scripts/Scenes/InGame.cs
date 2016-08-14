@@ -8,12 +8,24 @@ public class InGame : MonoBehaviour {
         PlayerData.Player.Level = 0;
 
         GameObject.Find("Menu UI").transform.localScale = GameObject.Find("SaveMessage UI").transform.localScale = new Vector3(0f, 0f, 0f);
-
+        
         if(PlayerData.flagLoadPlayerData)
             PlayerData.LoadPlayerData();
+        else {
+            // 현재 시간 등록
+            System.DateTime now = System.DateTime.Now;
+            PlayerData.Player.CreatedTime = string.Format("{0}년 {1}월 {2}일 {3}시", now.Year, now.Month, now.Day, now.Hour);
+        }
     }
     
 	void Update() {
+        /*
+         *  InGame.Update()
+         *      메뉴 활성화 작업
+         *      플레이시간 측정
+         */
+
+        /* 메뉴 활성화 작업 */
         Transform faderui = GameObject.Find("Screen Fader UI").transform;
         Transform fader = GameObject.Find("Screen Fader").transform;
         Transform menu = GameObject.Find("Menu UI").transform;
@@ -41,6 +53,7 @@ public class InGame : MonoBehaviour {
             }
         }
         
+        // 메뉴 내려오는 애니메이션
         if(menu.position.y > 0f) {
             float moved_y = menu.position.y - Time.deltaTime * 750;
 
@@ -48,6 +61,11 @@ public class InGame : MonoBehaviour {
                 menu.position = new Vector3(menu.position.x, 0f, menu.position.z);
             else
                 menu.position = new Vector3(menu.position.x, moved_y, menu.position.z);
+        }
+
+        /* 플레이시간 측정 */
+        if(menu.localScale == new Vector3(0f, 0f, 0f)) {
+            PlayerData.Player.PlayTime += Time.deltaTime;
         }
 	}
 

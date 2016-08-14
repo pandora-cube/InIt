@@ -105,6 +105,8 @@ public class CharacterMove : MonoBehaviour {
         };
         
         /* 화면 이동 */
+        // 위치 정보 갱신
+        PlayerData.Player.Location = GetPlayerArea();
         // 맵 정보 갱신
         GetBackgroundStatus();
 
@@ -182,7 +184,9 @@ public class CharacterMove : MonoBehaviour {
 
     string GetPlayerArea() {
         // 캐릭터 좌표
-        Vector3 chrPos = GetComponent<SpriteRenderer>().transform.position;
+        Vector3 chrPos = transform.position;
+        // Y좌표는 BoxCollider를 기준으로 함
+        chrPos.y += GetComponent<BoxCollider2D>().offset.y*2;
 
         foreach(SpriteRenderer spr in GameObject.FindObjectsOfType<SpriteRenderer>()) {
             string[] sprInfo = spr.name.Split('_');
@@ -195,7 +199,7 @@ public class CharacterMove : MonoBehaviour {
                 && chrPos.y >= sprPos.y-sprSize.y/2f && chrPos.y <= sprPos.y+sprSize.y/2f)
                 return spr.name;
         }
-        return string.Empty;
+        return PlayerData.Player.Location;
     }
 
     void GetBackgroundStatus() {

@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\UI\Nametag.cs" />
     <Compile Include="Assets\Scripts\UI\Option.cs" />
     <Compile Include="Assets\Scripts\UI\Posters.cs" />
+    <Compile Include="Assets\Scripts\UI\SaveOrLoad.cs" />
     <Compile Include="Assets\Scripts\UI\ScreenFader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

@@ -10,6 +10,10 @@ public class PlayerData {
     public class PLAYER {
         public int Level = 0;
         public float[] Position = { 0f };
+
+        public string Location = string.Empty;
+        public string CreatedTime = string.Empty;
+        public float PlayTime = 0f;
     }
     public static PLAYER Player_Default = new PLAYER();
     public static PLAYER Player = new PLAYER();
