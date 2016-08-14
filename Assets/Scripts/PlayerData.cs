@@ -11,6 +11,7 @@ public class PlayerData {
         public int Level = 0;
         public float[] Position = { 0f };
     }
+    public static PLAYER Player_Default = new PLAYER();
     public static PLAYER Player = new PLAYER();
     
     [Serializable]
@@ -37,11 +38,13 @@ public class PlayerData {
         Debug.Log("저장");
     }
 
-    public static void LoadPlayerData() {
+    public static PLAYER ReadPlayerData() {
+        string data;
+        PLAYER temp;
+
         try {
-            /* 데이터 불러오기 */
             // 문자열 데이터 불러옴
-            string data = PlayerPrefs.GetString("PlayerData");
+            data = PlayerPrefs.GetString("PlayerData");
 
             // 빈 데이터가 아닌 경우
             if(!string.IsNullOrEmpty(data)) {
@@ -50,15 +53,23 @@ public class PlayerData {
 
                 // 문자열 데이터를 Byte 배열 형태로 변환
                 ms = new MemoryStream(Convert.FromBase64String(data));
-                Player = (PLAYER)bf.Deserialize(ms);
+                temp = (PLAYER)bf.Deserialize(ms);
+                
+                return temp;
             }
+        } catch { }
 
-            /* 데이터 적용 */
+        return null;
+    }
+
+    public static void LoadPlayerData() {
+        // 불러오기에 실패한 경우
+        if((Player = ReadPlayerData()) == null) {
+            // 데이터를 기본 값으로 설정
+            Player = Player_Default;
+        } else {
+            // 데이터 적용
             GameObject.Find("Character").transform.position = new Vector3(Player.Position[0], Player.Position[1], Player.Position[2]);
-
-            Debug.Log("불러오기 성공");
-        } catch {
-            Debug.Log("불러오기 실패");
         }
     }
 }
