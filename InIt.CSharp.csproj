@@ -77,7 +77,6 @@
     <Compile Include="Assets\Scripts\Scenes\Intro.cs" />
     <Compile Include="Assets\Scripts\Scenes\Main.cs" />
     <Compile Include="Assets\Scripts\ScreenFadeInOut.cs" />
-    <Compile Include="Assets\Scripts\SingleTone.cs" />
     <Compile Include="Assets\Scripts\UI\Dialogue.cs" />
     <Compile Include="Assets\Scripts\UI\Nametag.cs" />
     <Compile Include="Assets\Scripts\UI\Option.cs" />

@@ -26,7 +26,7 @@ public class NPC : MonoBehaviour {
         /* 레벨에 따른 네임태그 강조 */
         try {
             // 다음 진행 상대가 이 NPC인 경우
-            if(Stage == SingleTone.Instance.Level+1) {
+            if(Stage == PlayerData.Player.Level+1) {
                 // 이 NPC의 네임태그 강조 처리
                 GetComponent<Nametag>().Blink = true;
             } else {

@@ -8,9 +8,9 @@ public class Option : MonoBehaviour {
 
     void Start() {
         // BGM 불륨
-        GameObject.Find("BGM Area").transform.FindChild("Slider").GetComponent<Slider>().value = SingleTone.Instance.volumeBGM;
+        GameObject.Find("BGM Area").transform.FindChild("Slider").GetComponent<Slider>().value = PlayerData.Option.volumeBGM;
         // 효과음 불륨
-        GameObject.Find("Effects Area").transform.FindChild("Slider").GetComponent<Slider>().value = SingleTone.Instance.volumeEffects;
+        GameObject.Find("Effects Area").transform.FindChild("Slider").GetComponent<Slider>().value = PlayerData.Option.volumeEffects;
     }
 
     public void Open() {

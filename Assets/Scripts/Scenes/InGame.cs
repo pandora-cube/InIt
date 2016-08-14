@@ -5,9 +5,11 @@ using System.Collections;
 
 public class InGame : MonoBehaviour {
     void Start() {
-        SingleTone.Instance.Level = 0;
+        PlayerData.Player.Level = 0;
 
         GameObject.Find("Menu UI").transform.localScale = new Vector3(0f, 0f, 0f);
+
+        PlayerData.LoadPlayerData();
     }
     
 	void Update() {
@@ -56,6 +58,10 @@ public class InGame : MonoBehaviour {
 
         // 캐릭터 이동 가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
+    }
+
+    public void Save() {
+        PlayerData.SavePlayerData();
     }
 
     public void Quit() {

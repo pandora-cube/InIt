@@ -72,7 +72,7 @@ public class Dialogue : MonoBehaviour {
         // 포스터 이미지
         Transform poster = transform.FindChild("Canvas").FindChild("Poster");
         // 상대 NPC 이름
-        string npcName = SingleTone.Instance.collidedNPC.Length > 0 ? SingleTone.Instance.collidedNPC : contactedNPC;
+        string npcName = PlayerData.Player.collidedNPC.Length > 0 ? PlayerData.Player.collidedNPC : contactedNPC;
         // 상대 NPC
         NPC npc;
         
@@ -103,7 +103,7 @@ public class Dialogue : MonoBehaviour {
             HideDialogue();
             // 레벨 설정
             if(msgIndex != -1)
-                SingleTone.Instance.Level = npc.Stage;
+                PlayerData.Player.Level = npc.Stage;
             // 대사 인덱스 초기화
             msgIndex = 0;
         }
@@ -113,7 +113,7 @@ public class Dialogue : MonoBehaviour {
             contactedNPC = npc.transform.name;
 
             // 이 NPC와 대화할 적정 단계인 경우
-            if(SingleTone.Instance.Level == npc.Stage-1) {
+            if(PlayerData.Player.Level == npc.Stage-1) {
                 string message = npc.Messages[msgIndex++];
 
                 // 포스터 이미지 출력 명령인 경우
@@ -127,7 +127,7 @@ public class Dialogue : MonoBehaviour {
                 }
             }
             // 플레이어의 진행도가 낮은 경우
-            else if(SingleTone.Instance.Level < npc.Stage-1) {
+            else if(PlayerData.Player.Level < npc.Stage-1) {
                 // 대화 거부 처리
                 msgIndex = -1;
                 // 대화 UI 출력
@@ -137,7 +137,7 @@ public class Dialogue : MonoBehaviour {
                     ShowDialogue(npc.Name, "나 말고 다른 사람한테 먼저 가봐.");
             }
             // 플레이어의 진행도가 높은 경우
-            else if(SingleTone.Instance.Level > npc.Stage-1) {
+            else if(PlayerData.Player.Level > npc.Stage-1) {
                 // 대화 거부 처리
                 msgIndex = -1;
                 // 대화 UI 출력

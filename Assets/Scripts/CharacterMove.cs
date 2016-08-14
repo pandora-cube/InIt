@@ -94,8 +94,18 @@ public class CharacterMove : MonoBehaviour {
             // 스프라이트 초기화
             charspr.sprite = standingSprite;
         }
+
+        // 캐릭터 좌표 데이터 갱신
+        PlayerData.Player.Position = new float[3] {
+            charspr.transform.position.x,
+            charspr.transform.position.y,
+            charspr.transform.position.z
+        };
         
         /* 화면 이동 */
+        // 맵 정보 갱신
+        GetBackgroundStatus();
+
         Vector3 charpos = charspr.transform.position;                   // 캐릭터의 좌표
         Vector3 campos = Camera.main.transform.position;                // 화면의 좌표
         Vector3 campos_moved = campos;                                  // 화면의 이동될 좌표
@@ -152,22 +162,19 @@ public class CharacterMove : MonoBehaviour {
             
             // 캐릭터를 반대편 출입구로 이동
             charspr.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, charspr.transform.position.z);
-
-            // 맵 이동에 따른 배경 스프라이트 정보 갱신
-            GetBackgroundStatus();
         }
     }
 
     void OnTriggerEnter2D(Collider2D col) {
         if(col.gameObject.tag == "NPC") {
-            SingleTone.Instance.collidedNPC = col.gameObject.name;
+            PlayerData.Player.collidedNPC = col.gameObject.name;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
         if(col.gameObject.tag == "NPC") {
-            SingleTone.Instance.collidedNPC = string.Empty;
+            PlayerData.Player.collidedNPC = string.Empty;
         }
     }
 

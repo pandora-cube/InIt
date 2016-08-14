@@ -25,7 +25,7 @@ public class Posters : MonoBehaviour {
                 // 아이콘의 이미지 설정
                 icon.GetComponent<Image>().sprite = GameObject.Find(string.Format("Poster{0}", i)).GetComponent<NPC>().Poster;
                 // 플레이어의 i번째 포스터 획득 여부에 따라 아이콘 활성화/비활성화
-                if(SingleTone.Instance.Level >= posterNPC.Stage)
+                if(PlayerData.Player.Level >= posterNPC.Stage)
                     EnablePosterIcon(icon);
                 else
                     DisablePosterIcon(icon);
