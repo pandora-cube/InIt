@@ -171,7 +171,7 @@ public class GameStart : MonoBehaviour {
     }
 
     public void Play() {
-        PlayerData.flagLoadPlayerData = gsSlider.value == 1;
+        PlayerData.flagLoadPlayerData = gsSlider.value == 1 && PlayerData.ReadPlayerData() != null;
         SceneManager.LoadScene("Scenes/FirstFloor");
     }
 }
