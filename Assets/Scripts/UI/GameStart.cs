@@ -142,6 +142,7 @@ public class GameStart : MonoBehaviour {
                 GameObject.Find("Delete Button").transform.localScale = new Vector3(0f, 0f, 0f);
             }
             else {
+                Debug.Log(temp.PlayTime.ToString());
                 int ptime = (int)temp.PlayTime;
                 string ptimetext = string.Empty;
             
@@ -171,7 +172,7 @@ public class GameStart : MonoBehaviour {
     }
 
     public void Play() {
-        PlayerData.flagLoadPlayerData = gsSlider.value == 1;
+        PlayerData.flagLoadPlayerData = gsSlider.value == 1 && PlayerData.ReadPlayerData() != null;
         SceneManager.LoadScene("Scenes/FirstFloor");
     }
 }
