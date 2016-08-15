@@ -6,7 +6,7 @@ public class Main : MonoBehaviour {
 	public void ClickPlayButton() {
         Transform faderui = GameObject.Find("Screen Fader UI").transform;
         Transform fader = GameObject.Find("Screen Fader").transform;
-        Transform solui = GameObject.Find("SaveOrLoad UI").transform;
+        Transform solui = GameObject.Find("GameStart UI").transform;
 
         // Screen Fader 페이드 인
         faderui.localScale = new Vector3(1f, 1f, 1f);
