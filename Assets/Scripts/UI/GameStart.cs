@@ -131,19 +131,25 @@ public class GameStart : MonoBehaviour {
         if(gsSlider.value == 1) {
             // 데이터를 임시로 불러옴
             PlayerData.PLAYER temp = PlayerData.ReadPlayerData();
-            int ptime = (int)temp.PlayTime;
-            string ptimetext = string.Empty;
             Transform summary = gsCanvas.FindChild("Summary");
-            
-            if(ptime/3600 > 0)
-                ptimetext += string.Format(" {0}시간", ptime/3600);
-            if((ptime%3600)/60 > 0)
-                ptimetext += string.Format(" {0}분", (ptime%3600)/60);
-            if(ptime%60 > 0)
-                ptimetext += string.Format(" {0}초", ptime%60);
+            string summarytext;
 
-            summary.FindChild("Text").GetComponent<Text>().text = string.Format("위치: {0}\n시작한 시각: {1}\n플레이 시간:{2}", temp.Location.Split('_')[1], temp.CreatedTime, ptimetext);
-            summary.localScale = new Vector3(1f, 1f, 1f);
+            if(temp == null)
+                summarytext = "불러올 데이터가 없습니다!\n선택 시 새 게임을 시작합니다.";
+            else {
+                int ptime = (int)temp.PlayTime;
+                string ptimetext = string.Empty;
+            
+                if(ptime/3600 > 0)
+                    ptimetext += string.Format(" {0}시간", ptime/3600);
+                if((ptime%3600)/60 > 0)
+                    ptimetext += string.Format(" {0}분", (ptime%3600)/60);
+                if(ptime%60 > 0)
+                    ptimetext += string.Format(" {0}초", ptime%60);
+
+                summarytext = string.Format("위치: {0}\n시작한 시각: {1}\n플레이 시간:{2}", temp.Location.Split('_')[1], temp.CreatedTime, ptimetext);
+            }
+            summary.FindChild("Text").GetComponent<Text>().text = summarytext;
         }
     }
 
