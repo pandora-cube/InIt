@@ -9,10 +9,10 @@ public class GameStart : MonoBehaviour {
     Slider gsSlider;
     Image gsSummary;
 
-    float BackgroundOH;         // Background의 Height (새 게임 선택시)
-    float TopBarOP;             // TopBar의 Y좌표 (새 게임 선택시)
-    float SliderOP;             // Slider의 Y좌표 (새 게임 선택시)
-    float PlayButtonOP;         // Play Button의 Y좌표 (새 게임 선택시)
+    float BackgroundOH = 210f;  // Background의 Height (새 게임 선택시)
+    float TopBarOP = 70f;       // TopBar의 Y좌표 (새 게임 선택시)
+    float SliderOP = -10f;      // Slider의 Y좌표 (새 게임 선택시)
+    float PlayButtonOP = -60f;  // Play Button의 Y좌표 (새 게임 선택시)
 
     float BackgroundMH = 310f;  // Background의 Height (불러오기 선택시)
     float TopBarMP = 120f;      // TopBar의 Y좌표 (불러오기 선택시)
@@ -25,10 +25,11 @@ public class GameStart : MonoBehaviour {
         gsSlider = gsCanvas.FindChild("Slider").GetComponent<Slider>();
         gsSummary = gsCanvas.FindChild("Summary").GetComponent<Image>();
 
-        BackgroundOH = gsCanvas.FindChild("Background").GetComponent<RectTransform>().sizeDelta.y;
-        TopBarOP = gsCanvas.FindChild("TopBar").localPosition.y;
-        SliderOP = gsCanvas.FindChild("Slider").localPosition.y;
-        PlayButtonOP = gsCanvas.FindChild("Play Button").localPosition.y;
+        gsSlider.value = 0f;
+        gsCanvas.FindChild("Background").GetComponent<RectTransform>().sizeDelta = new Vector2(gsCanvas.FindChild("Background").GetComponent<RectTransform>().sizeDelta.x, BackgroundOH);
+        gsCanvas.FindChild("TopBar").localPosition = new Vector3(0f, TopBarOP, 0f);
+        gsCanvas.FindChild("Slider").localPosition = new Vector3(0f, SliderOP, 0f);
+        gsCanvas.FindChild("Play Button").localPosition = new Vector3(0f, PlayButtonOP, 0f);
 
         gsUI.localScale = new Vector3(0f, 0f, 0f);
     }
