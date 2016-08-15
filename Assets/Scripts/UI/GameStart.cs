@@ -30,8 +30,8 @@ public class GameStart : MonoBehaviour {
         gsCanvas.FindChild("TopBar").localPosition = new Vector3(0f, TopBarOP, 0f);
         gsCanvas.FindChild("Slider").localPosition = new Vector3(0f, SliderOP, 0f);
         gsCanvas.FindChild("Play Button").localPosition = new Vector3(0f, PlayButtonOP, 0f);
-
-        gsUI.localScale = new Vector3(0f, 0f, 0f);
+        
+        gsUI.localScale = gsSummary.transform.localScale = new Vector3(0f, 0f, 0f);
     }
 
     // Summary와 Text의 투명도 설정
@@ -39,6 +39,7 @@ public class GameStart : MonoBehaviour {
         bool flag = true;               // 투명도가 변경되지 않은 경우 true
         float a = gsSummary.color.a;    // Summary와 하위 Text의 투명도
         Text text = gsSummary.transform.FindChild("Text").GetComponent<Text>();
+        Text del = gsSummary.transform.FindChild("Delete Button").FindChild("Text").GetComponent<Text>();
         
         if(gsSlider.value == 0f) {
             if(a != 0f)
@@ -62,6 +63,7 @@ public class GameStart : MonoBehaviour {
         // Summary와 하위 Text의 투명도를 설정한다.
         gsSummary.color = new Color(gsSummary.color.r, gsSummary.color.g, gsSummary.color.b, a);
         text.color = new Color(text.color.r, text.color.g, text.color.b, a);
+        del.color = new Color(del.color.r, del.color.g, del.color.b, a);
         
         return flag;
     }
@@ -135,8 +137,10 @@ public class GameStart : MonoBehaviour {
             Transform summary = gsCanvas.FindChild("Summary");
             string summarytext;
 
-            if(temp == null)
+            if(temp == null) {
                 summarytext = "불러올 데이터가 없습니다!\n선택 시 새 게임을 시작합니다.";
+                GameObject.Find("Delete Button").transform.localScale = new Vector3(0f, 0f, 0f);
+            }
             else {
                 int ptime = (int)temp.PlayTime;
                 string ptimetext = string.Empty;
@@ -159,6 +163,11 @@ public class GameStart : MonoBehaviour {
         gsUI.localScale = new Vector3(0f, 0f, 0f);
         // Screen Fader 페이드 아웃
         GameObject.Find("Screen Fader").GetComponent<ScreenFader>().endOpacity = 0f;
+    }
+
+    public void DeletePlayerData() {
+        PlayerData.DeletePlayerData();
+        OnValueChanged();
     }
 
     public void Play() {

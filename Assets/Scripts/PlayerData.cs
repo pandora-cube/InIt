@@ -28,7 +28,11 @@ public class PlayerData {
     public static bool flagLoadPlayerData = true;
     public static string collidedNPC = string.Empty;
 
-	public static void SavePlayerData() {
+    public static void DeletePlayerData() {
+        PlayerPrefs.DeleteKey("PlayerData");
+    }
+
+	public static void SavePlayerData(bool showmsg=true) {
         BinaryFormatter bf = new BinaryFormatter();
         MemoryStream ms = new MemoryStream();
 
