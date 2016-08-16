@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.5f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -73,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BGM.cs" />
     <Compile Include="Assets\Scripts\CharacterMove.cs" />
+    <Compile Include="Assets\Scripts\CloudMove.cs" />
     <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Scenes\InGame.cs" />
@@ -80,10 +79,10 @@
     <Compile Include="Assets\Scripts\Scenes\Main.cs" />
     <Compile Include="Assets\Scripts\ScreenFadeInOut.cs" />
     <Compile Include="Assets\Scripts\UI\Dialogue.cs" />
+    <Compile Include="Assets\Scripts\UI\GameStart.cs" />
     <Compile Include="Assets\Scripts\UI\Nametag.cs" />
     <Compile Include="Assets\Scripts\UI\Option.cs" />
     <Compile Include="Assets\Scripts\UI\Posters.cs" />
-    <Compile Include="Assets\Scripts\UI\GameStart.cs" />
     <Compile Include="Assets\Scripts\UI\ScreenFader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
