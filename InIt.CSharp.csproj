@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\BGM.cs" />
     <Compile Include="Assets\Scripts\CharacterMove.cs" />
     <Compile Include="Assets\Scripts\CloudMove.cs" />
+    <Compile Include="Assets\Scripts\Entrance.cs" />
     <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Scenes\InGame.cs" />

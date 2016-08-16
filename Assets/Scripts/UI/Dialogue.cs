@@ -177,7 +177,7 @@ public class Dialogue : MonoBehaviour {
         msgResult = string.Empty;
     }
 
-    void ShowDialogue(string name, string result) {
+    public void ShowDialogue(string name, string result) {
         // 이름 텍스트 설정
         dialogueObj.FindChild("Name").GetComponent<Text>().text = name;
         // Dialogue UI 활성화

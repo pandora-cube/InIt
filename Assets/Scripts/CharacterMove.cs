@@ -150,22 +150,9 @@ public class CharacterMove : MonoBehaviour {
 	}
 
     void OnCollisionEnter2D(Collision2D col) {
-        // 캐릭터 스프라이트
-        SpriteRenderer charspr = GetComponent<SpriteRenderer>();
-
         // 출입구 영역으로 들어온 경우
         if(col.gameObject.tag == "Entrance") {
-            // 출입구 오브젝트의 이름을 Split하여 정보를 얻음
-            // [0] 출입구 이름
-            // [1] 충돌한 출입구의 방향 (Outside or Inside)
-            string[] objInfo = col.gameObject.name.Split('/');
-            // 반대편 출입구 이름
-            string entrance = objInfo[0] + "/" + ((objInfo[1] == "Outside") ? "Inside" : "Outside");
-            // 반대편 출입구 스프라이트
-            SpriteRenderer other = GameObject.Find(entrance).GetComponent<SpriteRenderer>();
-            
-            // 캐릭터를 반대편 출입구로 이동
-            charspr.transform.position = new Vector3(other.transform.position.x, other.transform.position.y, charspr.transform.position.z);
+            col.gameObject.GetComponent<Entrance>().OnEnter();
         }
     }
 

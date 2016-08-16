@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CloudMove : MonoBehaviour {
-    public float scrollSpeed = 0.2f;
+    public float scrollSpeed = .01f;
     float Offset;
 
 	void Update() {
