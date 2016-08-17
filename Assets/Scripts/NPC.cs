@@ -3,11 +3,15 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class NPC : MonoBehaviour {
-    public string Name;             // NPC의 이름
-    public int Stage;               // 게임 진행 순차 중 이 NPC의 순번
-    public string[] Messages;       // NPC의 대사 배열
-    public Sprite Poster;           // 포스터 스프라이트
-    public bool dontChat = false;   // 대화 거부 등의 대사 수행 여부
+    public string Name;                 // NPC의 이름
+    public int Stage;                   // 게임 진행 순차 중 이 NPC의 순번
+    public string[] Messages;           // NPC의 대사 배열
+    public Sprite Poster;               // 포스터 스프라이트
+    public bool dontChat = false;       // 대화 거부 등의 대사 수행 여부
+    public Sprite[] movingSprites;      // 이동 애니메이션 스프라이트
+    public Vector2[] pointPosition;     // 이동할 좌표 배열
+
+    int movingIndex;                    // 현재 이동한 좌표 인덱스
 
     void Start() {
         // 기존에 존재하던 충돌 처리 용도의 BoxCollider2D
@@ -34,5 +38,9 @@ public class NPC : MonoBehaviour {
                 GetComponent<Nametag>().Blink = false;
             }
         } catch { }
+    }
+
+    public void MoveStart() {
+        movingIndex = 0;
     }
 }
