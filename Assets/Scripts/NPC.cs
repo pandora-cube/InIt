@@ -74,22 +74,36 @@ public class NPC : MonoBehaviour {
             MoveUpdate(pointPositions[movingIndex]);
     }
 
+    void OnCollisionEnter2D(Collision2D col) {
+        // 출입구 영역으로 들어온 경우
+        if(col.gameObject.tag == "Entrance") {
+            col.gameObject.GetComponent<Entrance>().OnEnter(transform);
+        }
+    }
+
+    void OnEntranceEnter() {
+        OnPointPositionEnter();
+    }
+
+    void OnPointPositionEnter() {
+        // 정지
+        GetComponent<Rigidbody2D>().isKinematic = true;
+        // 스프라이트 초기화
+        GetComponent<SpriteRenderer>().sprite = standingSprite;
+
+        // 목적지가 더 남은 경우
+        if(pointPositions.Length > movingIndex)
+            movingIndex++;
+    }
+
     void MoveUpdate(Vector2 destination) {
         Vector3 current = transform.position;                   // NPC의 현재 좌표
         SpriteRenderer sprite = GetComponent<SpriteRenderer>(); // NPC Sprite
         Vector2 speed = new Vector2(0f, 0f);                    // X, Y 속도
 
         if(destination.x+.1f > current.x && destination.x-.1f < current.x
-            && destination.y+.1f > current.y && destination.y-.1f < current.y) {
-            // 정지
-            GetComponent<Rigidbody2D>().isKinematic = true;
-            // 스프라이트 초기화
-            sprite.sprite = standingSprite;
-
-            // 목적지가 더 남은 경우
-            if(pointPositions.Length > movingIndex)
-                movingIndex++;
-        }
+            && destination.y+.1f > current.y && destination.y-.1f < current.y)
+            OnPointPositionEnter();
         else {
             if(destination.x > current.x) {         // 목적지가 오른쪽인 경우
                 sprite.flipX = false;

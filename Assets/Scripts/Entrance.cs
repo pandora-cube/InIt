@@ -4,14 +4,14 @@ using System.Collections;
 public class Entrance : MonoBehaviour {
     public bool Locked = false;
 
-    public void OnEnter() {
-        // 캐릭터
-        Transform character = GameObject.Find("Character").transform;
+    public void OnEnter(Transform dest_=null) {
+        Transform dest = dest_ == null ? GameObject.Find("Character").transform : dest_;
 
         // 잠긴 경우
         if(Locked) {
-            GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("문", "굳게 잠겨 있다.");
-            character.position = new Vector3(transform.position.x, transform.position.y, character.position.z);
+            if(dest_ == null)
+                GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("문", "굳게 잠겨 있다.");
+            dest.position = new Vector3(transform.position.x, transform.position.y, dest.position.z);
 
             return;
         }
@@ -26,6 +26,9 @@ public class Entrance : MonoBehaviour {
         Transform other = GameObject.Find(entrance).transform;
             
         // 캐릭터를 반대편 출입구로 이동
-        character.position = new Vector3(other.position.x, other.position.y, character.position.z);
+        dest.position = new Vector3(other.position.x, other.position.y, dest.position.z);
+
+        // 입퇴장 완료 콜백 호출
+        dest.SendMessage("OnEntranceEnter", SendMessageOptions.DontRequireReceiver);
     }
 }
