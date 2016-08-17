@@ -122,6 +122,15 @@ public class Dialogue : MonoBehaviour {
                     poster.FindChild("Image").GetComponent<Image>().sprite = npc.Poster;
                     poster.localScale = new Vector3(1f, 1f, 1f);
                 } else {
+                    // 메시지 중 뒤집기 명령이 포함되어 있는 경우
+                    if(message.Contains("{Flip}")) {
+                        // 뒤집는다.
+                        SpriteRenderer npcSprite = npc.GetComponent<SpriteRenderer>();
+                        npcSprite.flipY = !npcSprite.flipY;
+                        // 메시지에서 뒤집기 명령 제거
+                        message.Replace("{Flip}", string.Empty);
+                    }
+
                     // 대화 UI 출력
                     ShowDialogue(npc.Name, message);
                 }
