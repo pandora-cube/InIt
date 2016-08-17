@@ -105,18 +105,21 @@ public class NPC : MonoBehaviour {
             && destination.y+.1f > current.y && destination.y-.1f < current.y)
             OnPointPositionEnter();
         else {
-            if(destination.x > current.x) {         // 목적지가 오른쪽인 경우
+            if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
+            } else if(destination.x > current.x) {  // 목적지가 오른쪽인 경우
                 sprite.flipX = false;
                 speed.x = moveSpeed;
             } else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
                 sprite.flipX = true;
                 speed.x = -moveSpeed;
             }
-        
-            if(destination.y > current.y)           // 목적지가 윗쪽인 경우
+            
+            if(destination.y == 256f) {             // Y좌표로 이동하지 않는 경우
+            } else if(destination.y > current.y) {  // 목적지가 윗쪽인 경우
                 speed.y = moveSpeed;
-            else if(destination.y < current.y)      // 목적지가 아랫쪽인 경우
+            } else if(destination.y < current.y) {  // 목적지가 아랫쪽인 경우
                 speed.y = -moveSpeed;
+            }
         
             // 정지 해제
             GetComponent<Rigidbody2D>().isKinematic = false;
