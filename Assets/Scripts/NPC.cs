@@ -101,8 +101,8 @@ public class NPC : MonoBehaviour {
         SpriteRenderer sprite = GetComponent<SpriteRenderer>(); // NPC Sprite
         Vector2 speed = new Vector2(0f, 0f);                    // X, Y 속도
 
-        if(destination.x+.1f > current.x && destination.x-.1f < current.x
-            && destination.y+.1f > current.y && destination.y-.1f < current.y)
+        if((destination.x+.1f > current.x && destination.x-.1f < current.x || destination.x == 256f)
+            && (destination.y+.1f > current.y && destination.y-.1f < current.y || destination.y == 256f))
             OnPointPositionEnter();
         else {
             if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
