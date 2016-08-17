@@ -37,14 +37,17 @@ public class NPC : MonoBehaviour {
         // Trigger로 설정
         trigger.isTrigger = true;
         // 영역을 충돌 처리 Collider보다 크게 설정
-        trigger.size = new Vector2(original.size.x+.1f, original.size.y+.1f);
+        trigger.size = new Vector2(original.size.x+.5f, original.size.y+.5f);
         // Offset을 원점으로 설정
         trigger.offset = new Vector2(0f, 0f);
 
         /* 이동 사용 NPC 처리 */
         // 이동 기능을 사용하는 NPC인 경우
-        if(pointPositions.Length > 0)
-            gameObject.AddComponent<Rigidbody2D>();
+        if(pointPositions.Length > 0) {
+            Rigidbody2D rigid = gameObject.AddComponent<Rigidbody2D>();
+            rigid.freezeRotation = true;
+            MoveStart();
+        }
     }
 
     void Update() {
@@ -74,23 +77,10 @@ public class NPC : MonoBehaviour {
     void MoveUpdate(Vector2 destination) {
         Vector3 current = transform.position;                   // NPC의 현재 좌표
         SpriteRenderer sprite = GetComponent<SpriteRenderer>(); // NPC Sprite
-        float speed_ = moveSpeed * Time.deltaTime;              // 속도
         Vector2 speed = new Vector2(0f, 0f);                    // X, Y 속도
 
-        if(destination.x > current.x)           // 목적지가 윗쪽인 경우
-            speed.x = speed_;
-        else if(destination.x < current.x)      // 목적지가 아랫쪽인 경우
-            speed.x = -speed_;
-
-        if(destination.y > current.y) {         // 목적지가 오른쪽인 경우
-            sprite.flipY = false;
-            speed.y = speed_;
-        } else if(destination.y < current.y) {  // 목적지가 왼쪽인 경우
-            sprite.flipY = true;
-            speed.y = -speed_;
-        }
-        
-        if(speed == new Vector2(0f, 0f)) {
+        if(destination.x+.1f > current.x && destination.x-.1f < current.x
+            && destination.y+.1f > current.y && destination.y-.1f < current.y) {
             // 정지
             GetComponent<Rigidbody2D>().isKinematic = true;
             // 스프라이트 초기화
@@ -99,7 +89,21 @@ public class NPC : MonoBehaviour {
             // 목적지가 더 남은 경우
             if(pointPositions.Length > movingIndex)
                 movingIndex++;
-        } else {
+        }
+        else {
+            if(destination.x > current.x) {         // 목적지가 오른쪽인 경우
+                sprite.flipX = false;
+                speed.x = moveSpeed;
+            } else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
+                sprite.flipX = true;
+                speed.x = -moveSpeed;
+            }
+        
+            if(destination.y > current.y)           // 목적지가 윗쪽인 경우
+                speed.y = moveSpeed;
+            else if(destination.y < current.y)      // 목적지가 아랫쪽인 경우
+                speed.y = -moveSpeed;
+        
             // 정지 해제
             GetComponent<Rigidbody2D>().isKinematic = false;
             // 속도 처리
