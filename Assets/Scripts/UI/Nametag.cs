@@ -7,7 +7,7 @@ public class Nametag : MonoBehaviour {
     public string tagText;          // 네임태그의 텍스트
     public bool Blink = false;      // 이 속성이 참이면 네임태그가 강조 처리됨
 
-    Object tag;                     // 네임태그 오브젝트
+    new Object tag;                     // 네임태그 오브젝트
     string tagName;                 // 네임태그 오브젝트의 이름
     Color originalColor;            // 네임태그의 초기 색상
     bool blinkMode = true;          // 이 속성이 참이면 강조 처리중 네임태그 색상의 R값이 더해짐
