@@ -94,6 +94,15 @@ public class NPC : MonoBehaviour {
         // 목적지가 더 남은 경우
         if(pointPositions.Length > movingIndex)
             movingIndex++;
+        else
+            OnMoveEnd();
+    }
+
+    void OnMoveEnd() {
+        switch(transform.name) {
+            default:
+                break;
+        }
     }
 
     void MoveUpdate(Vector2 destination) {
