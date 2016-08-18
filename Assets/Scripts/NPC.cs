@@ -30,7 +30,6 @@ public class NPC : MonoBehaviour {
          *  NPC.Start()
          *      초기화
          *      대화 가능 영역 트리거 추가
-         *      Rigidbody2D 컴포넌트 추가
          */
         
         /* 초기화 */
@@ -48,9 +47,6 @@ public class NPC : MonoBehaviour {
         // Offset을 원점으로 설정
         trigger.offset = new Vector2(0f, 0f);
 
-        /* Rigidbody2D 컴포넌트 추가 */
-        Rigidbody2D rigid = gameObject.AddComponent<Rigidbody2D>();
-        rigid.freezeRotation = true;
         CommandStart();
     }
 
@@ -91,9 +87,11 @@ public class NPC : MonoBehaviour {
 
     void OnCommandEnd() {
         eventReservated = false;
-
-        // 정지
-        GetComponent<Rigidbody2D>().isKinematic = true;
+        
+        if(GetComponents<Rigidbody2D>().Length > 0) {
+            // Rigidbody2D 컴포넌트 제거
+            Destroy(GetComponent<Rigidbody2D>());
+        }
         // 스프라이트 초기화
         GetComponent<SpriteRenderer>().sprite = standingSprite;
 
@@ -119,6 +117,12 @@ public class NPC : MonoBehaviour {
         switch(command) {
             // 특정 좌표로 이동
             case "Move":
+                if(GetComponents<Rigidbody2D>().Length == 0) {
+                    // Rigidbody2D 컴포넌트 추가
+                    Rigidbody2D rigid = gameObject.AddComponent<Rigidbody2D>();
+                    rigid.freezeRotation = true;
+                }
+
                 Vector2 destination = new Vector2(float.Parse(parameter[0]), float.Parse(parameter[1]));    // 이동 목적지
                 Vector3 current = transform.position;                                                       // NPC의 현재 좌표
                 SpriteRenderer sprite = GetComponent<SpriteRenderer>();                                     // NPC Sprite
