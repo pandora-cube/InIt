@@ -126,7 +126,7 @@ public class Dialogue : MonoBehaviour {
                     if(message.Contains("{Flip}")) {
                         // 뒤집는다.
                         SpriteRenderer npcSprite = npc.GetComponent<SpriteRenderer>();
-                        npcSprite.flipY = !npcSprite.flipY;
+                        npcSprite.flipX = !npcSprite.flipX;
                         // 메시지에서 뒤집기 명령 제거
                         message.Replace("{Flip}", string.Empty);
                     }
