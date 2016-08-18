@@ -19,6 +19,7 @@ public class NPC : MonoBehaviour {
     public Sprite[] movingSprites;      // 이동 애니메이션 스프라이트 (오른쪽을 보고 있어야 함)
     public COMMAND[] Commands;          // 명령
 
+    bool eventReservated = false;       // 명령 종료 이벤트 예약 여부
     bool Executed = false;              // 명령 이행 여부
     int commandIndex = 0;               // 현재 이행한 명령 인덱스
     Sprite standingSprite;              // 정지상태 스프라이트
@@ -89,6 +90,8 @@ public class NPC : MonoBehaviour {
     }
 
     void OnCommandEnd() {
+        eventReservated = false;
+
         // 정지
         GetComponent<Rigidbody2D>().isKinematic = true;
         // 스프라이트 초기화
@@ -114,7 +117,8 @@ public class NPC : MonoBehaviour {
         string[] parameter = parameters.Split(',');
 
         switch(command) {
-            case "Move":    // 특정 좌표로 이동
+            // 특정 좌표로 이동
+            case "Move":
                 Vector2 destination = new Vector2(float.Parse(parameter[0]), float.Parse(parameter[1]));    // 이동 목적지
                 Vector3 current = transform.position;                                                       // NPC의 현재 좌표
                 SpriteRenderer sprite = GetComponent<SpriteRenderer>();                                     // NPC Sprite
@@ -153,11 +157,33 @@ public class NPC : MonoBehaviour {
                     sprite.sprite = movingSprites[animIndex/animSpeed];
                 }
                 break;
-            case "Stop":    // 일정 시간동안 정지
-                Invoke("OnCommandEnd", float.Parse(parameters));
+            // 일정 시간동안 정지
+            case "Stop":
+                if(!eventReservated) {
+                    eventReservated = true;
+                    Invoke("OnCommandEnd", float.Parse(parameters));
+                }
                 break;
-            case "Teleport":    // 특정 오브젝트에게 이동
-                transform.position = GameObject.Find(parameters).transform.position;
+            // 특정 오브젝트에게 이동
+            case "Teleport":
+                Vector3 position = GameObject.Find(parameters).transform.position;
+                transform.position = new Vector3(position.x, position.y, transform.position.z);
+                OnCommandEnd();
+                break;
+            // FlipX 상태 설정
+            case "Flip":
+                GetComponent<SpriteRenderer>().flipX = bool.Parse(parameters);
+                OnCommandEnd();
+                break;
+            // 특정 출입구의 잠금을 해제함
+            case "Unlock":
+                GameObject.Find(parameters).GetComponent<Entrance>().Locked = false;
+                OnCommandEnd();
+                break;
+            // 특정 출입구를 잠금
+            case "Lock":
+                GameObject.Find(parameters).GetComponent<Entrance>().Locked = true;
+                OnCommandEnd();
                 break;
         }
     }
