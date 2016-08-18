@@ -3,6 +3,12 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class NPC : MonoBehaviour {
+    [System.Serializable]
+    public struct COMMAND {
+        public string Command;
+        public string Parameters;
+    };
+
     public string Name;                 // NPC의 이름
     public int Stage;                   // 게임 진행 순차 중 이 NPC의 순번
     public string[] Messages;           // NPC의 대사 배열
@@ -11,19 +17,19 @@ public class NPC : MonoBehaviour {
     public float moveSpeed = 3f;        // 이동 속도
     public int animSpeed = 3;           // 애니메이션 재생 속도
     public Sprite[] movingSprites;      // 이동 애니메이션 스프라이트 (오른쪽을 보고 있어야 함)
-    public Vector2[] pointPositions;    // 이동할 좌표 배열
+    public COMMAND[] Commands;          // 명령
 
-    bool Move = false;                  // 이동 여부
+    bool Executed = false;              // 명령 이행 여부
+    int commandIndex = 0;               // 현재 이행한 명령 인덱스
     Sprite standingSprite;              // 정지상태 스프라이트
     int animIndex = 0;                  // 애니메이션 재생 인덱스
-    int movingIndex = 0;                // 현재 이동한 좌표 인덱스
 
     void Start() {
         /*
          *  NPC.Start()
          *      초기화
          *      대화 가능 영역 트리거 추가
-         *      이동 사용 NPC 처리
+         *      Rigidbody2D 컴포넌트 추가
          */
         
         /* 초기화 */
@@ -41,20 +47,17 @@ public class NPC : MonoBehaviour {
         // Offset을 원점으로 설정
         trigger.offset = new Vector2(0f, 0f);
 
-        /* 이동 사용 NPC 처리 */
-        // 이동 기능을 사용하는 NPC인 경우
-        if(pointPositions.Length > 0) {
-            Rigidbody2D rigid = gameObject.AddComponent<Rigidbody2D>();
-            rigid.freezeRotation = true;
-            MoveStart();
-        }
+        /* Rigidbody2D 컴포넌트 추가 */
+        Rigidbody2D rigid = gameObject.AddComponent<Rigidbody2D>();
+        rigid.freezeRotation = true;
+        CommandStart();
     }
 
     void Update() {
         /*
          *  NPC.Update()
          *      레벨에 따른 네임태그 강조
-         *      이동
+         *      명령 이행
          */
 
         /* 레벨에 따른 네임태그 강조 */
@@ -69,9 +72,9 @@ public class NPC : MonoBehaviour {
             }
         } catch { }
 
-        /* 이동 */
-        if(Move && pointPositions.Length > movingIndex)
-            MoveUpdate(pointPositions[movingIndex]);
+        /* 명령 이행 */
+        if(Executed && Commands.Length > commandIndex)
+            OnCommandUpdate();
     }
 
     void OnCollisionEnter2D(Collision2D col) {
@@ -82,70 +85,85 @@ public class NPC : MonoBehaviour {
     }
 
     void OnEntranceEnter() {
-        OnPointPositionEnter();
+        OnCommandEnd();
     }
 
-    void OnPointPositionEnter() {
+    void OnCommandEnd() {
         // 정지
         GetComponent<Rigidbody2D>().isKinematic = true;
         // 스프라이트 초기화
         GetComponent<SpriteRenderer>().sprite = standingSprite;
 
-        // 목적지가 더 남은 경우
-        if(pointPositions.Length > movingIndex)
-            movingIndex++;
+        // 명령이 더 남은 경우
+        if(Commands.Length > commandIndex)
+            commandIndex++;
         else
-            OnMoveEnd();
+            OnCommandsEnd();
     }
 
-    void OnMoveEnd() {
+    void OnCommandsEnd() {
         switch(transform.name) {
             default:
                 break;
         }
     }
 
-    void MoveUpdate(Vector2 destination) {
-        Vector3 current = transform.position;                   // NPC의 현재 좌표
-        SpriteRenderer sprite = GetComponent<SpriteRenderer>(); // NPC Sprite
-        Vector2 speed = new Vector2(0f, 0f);                    // X, Y 속도
+    void OnCommandUpdate() {
+        string command = Commands[commandIndex].Command;
+        string parameters = Commands[commandIndex].Parameters;
+        string[] parameter = parameters.Split(',');
 
-        if((destination.x+.1f > current.x && destination.x-.1f < current.x || destination.x == 256f)
-            && (destination.y+.1f > current.y && destination.y-.1f < current.y || destination.y == 256f))
-            OnPointPositionEnter();
-        else {
-            if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
-            } else if(destination.x > current.x) {  // 목적지가 오른쪽인 경우
-                sprite.flipX = false;
-                speed.x = moveSpeed;
-            } else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
-                sprite.flipX = true;
-                speed.x = -moveSpeed;
-            }
+        switch(command) {
+            case "Move":    // 특정 좌표로 이동
+                Vector2 destination = new Vector2(float.Parse(parameter[0]), float.Parse(parameter[1]));    // 이동 목적지
+                Vector3 current = transform.position;                                                       // NPC의 현재 좌표
+                SpriteRenderer sprite = GetComponent<SpriteRenderer>();                                     // NPC Sprite
+                Vector2 speed = new Vector2(0f, 0f);                                                        // X, Y 속도
+
+                if((destination.x+.1f > current.x && destination.x-.1f < current.x || destination.x == 256f)
+                    && (destination.y+.1f > current.y && destination.y-.1f < current.y || destination.y == 256f))
+                    OnCommandEnd();
+                else {
+                    if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
+                    } else if(destination.x > current.x) {  // 목적지가 오른쪽인 경우
+                        sprite.flipX = false;
+                        speed.x = moveSpeed;
+                    } else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
+                        sprite.flipX = true;
+                        speed.x = -moveSpeed;
+                    }
             
-            if(destination.y == 256f) {             // Y좌표로 이동하지 않는 경우
-            } else if(destination.y > current.y) {  // 목적지가 윗쪽인 경우
-                speed.y = moveSpeed;
-            } else if(destination.y < current.y) {  // 목적지가 아랫쪽인 경우
-                speed.y = -moveSpeed;
-            }
+                    if(destination.y == 256f) {             // Y좌표로 이동하지 않는 경우
+                    } else if(destination.y > current.y) {  // 목적지가 윗쪽인 경우
+                        speed.y = moveSpeed;
+                    } else if(destination.y < current.y) {  // 목적지가 아랫쪽인 경우
+                        speed.y = -moveSpeed;
+                    }
         
-            // 정지 해제
-            GetComponent<Rigidbody2D>().isKinematic = false;
-            // 속도 처리
-            GetComponent<Rigidbody2D>().velocity = new Vector3(speed.x, speed.y, 0f);
+                    // 정지 해제
+                    GetComponent<Rigidbody2D>().isKinematic = false;
+                    // 속도 처리
+                    GetComponent<Rigidbody2D>().velocity = new Vector3(speed.x, speed.y, 0f);
 
-            // 이동 애니메이션 인덱스 처리
-            animIndex++;
-            if(animIndex/animSpeed >= movingSprites.Length)
-                animIndex = 0;
-            // 이동 스프라이트 이미지로 전환
-            sprite.sprite = movingSprites[animIndex/animSpeed];
+                    // 이동 애니메이션 인덱스 처리
+                    animIndex++;
+                    if(animIndex/animSpeed >= movingSprites.Length)
+                        animIndex = 0;
+                    // 이동 스프라이트 이미지로 전환
+                    sprite.sprite = movingSprites[animIndex/animSpeed];
+                }
+                break;
+            case "Stop":    // 일정 시간동안 정지
+                Invoke("OnCommandEnd", float.Parse(parameters));
+                break;
+            case "Teleport":    // 특정 오브젝트에게 이동
+                transform.position = GameObject.Find(parameters).transform.position;
+                break;
         }
     }
 
-    public void MoveStart() {
-        movingIndex = 0;
-        Move = true;
+    public void CommandStart() {
+        commandIndex = 0;
+        Executed = true;
     }
 }
