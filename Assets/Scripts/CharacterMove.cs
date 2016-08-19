@@ -151,20 +151,20 @@ public class CharacterMove : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col) {
         // 출입구 영역으로 들어온 경우
-        if(col.gameObject.tag == "Entrance") {
+        if(col.gameObject.GetComponents<Entrance>().Length > 0) {
             col.gameObject.GetComponent<Entrance>().OnEnter();
         }
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(col.gameObject.tag == "NPC") {
+        if(col.gameObject.GetComponents<NPC>().Length > 0) {
             PlayerData.collidedNPC = col.gameObject.name;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
-        if(col.gameObject.tag == "NPC") {
+        if(col.gameObject.GetComponents<NPC>().Length > 0) {
             PlayerData.collidedNPC = string.Empty;
         }
     }
