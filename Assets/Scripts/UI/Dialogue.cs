@@ -146,7 +146,7 @@ public class Dialogue : MonoBehaviour {
                     ShowDialogue(npc.Name, "나 말고 다른 사람한테 먼저 가봐.");
             }
             // 플레이어의 진행도가 높은 경우
-            else if(PlayerData.Player.Level > npc.Stage-1) {
+            else if(PlayerData.Player.Level > npc.Stage-1 && npc.Stage != 0) {
                 // 대화 거부 처리
                 msgIndex = -1;
                 // 대화 UI 출력
