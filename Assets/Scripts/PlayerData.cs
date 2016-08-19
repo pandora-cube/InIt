@@ -42,8 +42,6 @@ public class PlayerData {
         PlayerPrefs.SetString("PlayerData", Convert.ToBase64String(ms.GetBuffer()));
 
         GameObject.Find("SaveMessage UI").transform.localScale = new Vector3(1f, 1f, 1f);
-
-        Debug.Log("저장");
     }
 
     public static PLAYER ReadPlayerData() {
@@ -79,5 +77,34 @@ public class PlayerData {
             // 데이터 적용
             GameObject.Find("Character").transform.position = new Vector3(Player.Position[0], Player.Position[1], Player.Position[2]);
         }
+    }
+
+    public static void SaveOptionData() {
+        BinaryFormatter bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream();
+
+        // 데이터를 Byte 배열 형태로 변환
+        bf.Serialize(ms, Option);
+        // 문자열로 변환하여 저장
+        PlayerPrefs.SetString("OptionData", Convert.ToBase64String(ms.GetBuffer()));
+    }
+
+    public static void LoadOptionData() {
+        string data;
+
+        try {
+            // 문자열 데이터 불러옴
+            data = PlayerPrefs.GetString("OptionData");
+
+            // 빈 데이터가 아닌 경우
+            if(!string.IsNullOrEmpty(data)) {
+                BinaryFormatter bf = new BinaryFormatter();
+                MemoryStream ms = new MemoryStream();
+
+                // 문자열 데이터를 Byte 배열 형태로 변환
+                ms = new MemoryStream(Convert.FromBase64String(data));
+                Option = (OPTION)bf.Deserialize(ms);
+            }
+        } catch { }
     }
 }
