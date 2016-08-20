@@ -46,8 +46,6 @@ public class NPC : MonoBehaviour {
         trigger.size = new Vector2(original.size.x+.25f, original.size.y+.25f);
         // Offset을 원점으로 설정
         trigger.offset = new Vector2(0f, 0f);
-
-        CommandStart();
     }
 
     void Update() {
@@ -86,6 +84,8 @@ public class NPC : MonoBehaviour {
     }
 
     void OnCommandEnd() {
+        Debug.Log(string.Format("{0} End", commandIndex));
+
         eventReservated = false;
         
         if(GetComponents<Rigidbody2D>().Length > 0) {
@@ -96,17 +96,17 @@ public class NPC : MonoBehaviour {
         GetComponent<SpriteRenderer>().sprite = standingSprite;
 
         // 명령이 더 남은 경우
-        if(Commands.Length > commandIndex)
+        if(Commands.Length-1 > commandIndex)
             commandIndex++;
-        else
+        else 
             OnCommandsEnd();
     }
 
     void OnCommandsEnd() {
-        switch(transform.name) {
-            default:
-                break;
-        }
+        commandIndex = 0;
+        Executed = false;
+
+        GameObject.Find(transform.name).SendMessage("OnNPCCommandsEnd", SendMessageOptions.DontRequireReceiver);
     }
 
     void OnCommandUpdate() {
@@ -128,8 +128,8 @@ public class NPC : MonoBehaviour {
                 SpriteRenderer sprite = GetComponent<SpriteRenderer>();                                     // NPC Sprite
                 Vector2 speed = new Vector2(0f, 0f);                                                        // X, Y 속도
 
-                if((destination.x+.1f > current.x && destination.x-.1f < current.x || destination.x == 256f)
-                    && (destination.y+.1f > current.y && destination.y-.1f < current.y || destination.y == 256f))
+                if((destination.x+.25f > current.x && destination.x-.25f < current.x || destination.x == 256f)
+                    && (destination.y+.25f > current.y && destination.y-.25f < current.y || destination.y == 256f))
                     OnCommandEnd();
                 else {
                     if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
