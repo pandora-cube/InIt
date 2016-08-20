@@ -75,7 +75,12 @@ public class Dialogue : MonoBehaviour {
         string npcName = contactedNPC.Length > 0 ? contactedNPC : PlayerData.collidedNPC;
         // 상대 NPC
         NPC npc;
-        
+
+        if(msgCount != 0) {
+            msgCount = msgLength-1;
+            return;
+        }
+
         // 충돌 유지중이거나 대화중인 NPC가 없는 경우
         if(npcName.Length < 1) {
             if(transform.localScale == new Vector3(1f, 1f, 1f))
@@ -88,10 +93,6 @@ public class Dialogue : MonoBehaviour {
         // 메뉴가 활성화되어 있는 경우
         if(GameObject.Find("Menu UI").transform.localScale == new Vector3(1f, 1f, 1f)) {
             Debug.Log("[Talk Debug] 메뉴 활성화되어 있음");
-        }
-        // 대사가 출력중인 경우
-        else if(msgCount != 0) {
-            Debug.Log("[Talk Debug] 대사 출력중");
         }
         // NPC가 대화를 거부하였거나 더 할 대사가 없는 경우
         else if(msgIndex == -1 || msgIndex >= npc.Messages.Length) {
