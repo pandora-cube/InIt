@@ -128,7 +128,12 @@ public class Dialogue : MonoBehaviour {
                         SpriteRenderer npcSprite = npc.GetComponent<SpriteRenderer>();
                         npcSprite.flipX = !npcSprite.flipX;
                         // 메시지에서 뒤집기 명령 제거
-                        message.Replace("{Flip}", string.Empty);
+                        message = message.Replace("{Flip}", string.Empty);
+                    }
+                    // 미스터리 영예과
+                    if(message.Contains("{Film_Artist}")) {
+                        GameObject.Find("Film_Artist").GetComponent<NPC>().CommandStart();
+                        message = message.Replace("{Film_Artist}", string.Empty);
                     }
 
                     // 대화 UI 출력
@@ -184,6 +189,7 @@ public class Dialogue : MonoBehaviour {
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = true;
         // 초기화
         msgResult = string.Empty;
+        msgCount = 0;
     }
 
     public void ShowDialogue(string name, string result) {
