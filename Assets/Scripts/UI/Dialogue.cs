@@ -67,7 +67,7 @@ public class Dialogue : MonoBehaviour {
         if(talkToggle)
             return;
         talkToggle = true;
-        Invoke("ToggleTalk", .5f);
+        Invoke("ToggleTalk", .25f);
 
         // 포스터 이미지
         Transform poster = transform.FindChild("Canvas").FindChild("Poster");
