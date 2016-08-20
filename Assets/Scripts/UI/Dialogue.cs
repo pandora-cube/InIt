@@ -72,7 +72,7 @@ public class Dialogue : MonoBehaviour {
         // 포스터 이미지
         Transform poster = transform.FindChild("Canvas").FindChild("Poster");
         // 상대 NPC 이름
-        string npcName = PlayerData.collidedNPC.Length > 0 ? PlayerData.collidedNPC : contactedNPC;
+        string npcName = contactedNPC.Length > 0 ? contactedNPC : PlayerData.collidedNPC;
         // 상대 NPC
         NPC npc;
         
