@@ -130,6 +130,13 @@ public class Dialogue : MonoBehaviour {
                         // 메시지에서 뒤집기 명령 제거
                         message = message.Replace("{Flip}", string.Empty);
                     }
+                    // 김민경
+                    if(message.Contains("{Mingyeong_Kim}")) {
+                        float y = GameObject.Find("Mingyeong_Kim").transform.position.y + 0.2f;
+                        Transform character = GameObject.Find("Character").transform;
+                        character.position = new Vector3(character.position.x, y, character.position.z);
+                        message = message.Replace("{Mingyeong_Kim}", string.Empty);
+                    }
                     // 미스터리 영예과
                     if(message.Contains("{Film_Artist}")) {
                         GameObject.Find("Film_Artist").GetComponent<NPC>().CommandStart();
