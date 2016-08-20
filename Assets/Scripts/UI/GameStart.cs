@@ -9,15 +9,15 @@ public class GameStart : MonoBehaviour {
     Slider gsSlider;
     Image gsSummary;
 
-    float BackgroundOH = 210f;  // Background의 Height (새 게임 선택시)
-    float TopBarOP = 70f;       // TopBar의 Y좌표 (새 게임 선택시)
-    float SliderOP = -10f;      // Slider의 Y좌표 (새 게임 선택시)
-    float PlayButtonOP = -60f;  // Play Button의 Y좌표 (새 게임 선택시)
+    float BgTopOP = 70f;            // Background_Top의 Y좌표 (새 게임 선택시)
+    float BgBotOP = -70f;           // Background_Bottom의 Y좌표 (새 게임 선택시)
+    float SliderOP = 0f;            // Slider의 Y좌표 (새 게임 선택시)
+    float PlayButtonOP = -60f;      // Play Button의 Y좌표 (새 게임 선택시)
 
-    float BackgroundMH = 310f;  // Background의 Height (불러오기 선택시)
-    float TopBarMP = 120f;      // TopBar의 Y좌표 (불러오기 선택시)
-    float SliderMP = 40f;       // Slider의 Y좌표 (불러오기 선택시)
-    float PlayButtonMP = -110f; // Play Button의 Y좌표 (불러오기 선택시)
+    float BgTopMP = 120f;           // Background_Top의 Y좌표 (불러오기 선택시)
+    float BgBotMP = -120f;          // Background_Bottom의 Y좌표 (불러오기 선택시)
+    float SliderMP = 50f;           // Slider의 Y좌표 (불러오기 선택시)
+    float PlayButtonMP = -110f;     // Play Button의 Y좌표 (불러오기 선택시)
 
     void Start() {
         gsUI = GameObject.Find("GameStart UI").transform;
@@ -26,8 +26,8 @@ public class GameStart : MonoBehaviour {
         gsSummary = gsCanvas.FindChild("Summary").GetComponent<Image>();
 
         gsSlider.value = 0f;
-        gsCanvas.FindChild("Background").GetComponent<RectTransform>().sizeDelta = new Vector2(gsCanvas.FindChild("Background").GetComponent<RectTransform>().sizeDelta.x, BackgroundOH);
-        gsCanvas.FindChild("TopBar").localPosition = new Vector3(0f, TopBarOP, 0f);
+        gsCanvas.FindChild("Background_Top").localPosition = new Vector3(0f, BgTopOP, 0f);
+        gsCanvas.FindChild("Background_Bottom").localPosition = new Vector3(0f, BgBotOP, 0f);
         gsCanvas.FindChild("Slider").localPosition = new Vector3(0f, SliderOP, 0f);
         gsCanvas.FindChild("Play Button").localPosition = new Vector3(0f, PlayButtonOP, 0f);
         
@@ -71,50 +71,50 @@ public class GameStart : MonoBehaviour {
     // UI 구성 오브젝트들의 위치 설정
     bool SetObjectsPosition() {
         bool flag = true; // 위치가 변경되지 않은 경우 true
-
-        RectTransform bg = gsCanvas.FindChild("Background").GetComponent<RectTransform>();
-        Transform topbar = gsCanvas.FindChild("TopBar");
+        
+        Transform bgtop = gsCanvas.FindChild("Background_Top");
+        Transform bgbot = gsCanvas.FindChild("Background_Bottom");
         Transform slider = gsCanvas.FindChild("Slider");
         Transform playbutton = gsCanvas.FindChild("Play Button");
 
         // 오브젝트들의 이동 속도
         float speed = 50f * Time.deltaTime;
-        // 오브젝트들의 이동될 Y좌표 (혹은 변경될 높이)
-        float bgTo = bg.sizeDelta.y;
-        float topbarTo = topbar.localPosition.y;
+        // 오브젝트들의 이동될 Y좌표
+        float bgtopTo = bgtop.localPosition.y;
+        float bgbotTo = bgbot.localPosition.y;
         float sliderTo = slider.localPosition.y;
         float playbuttonTo = playbutton.localPosition.y;
 
         if(gsSlider.value == 0f) {
-            if(bgTo != BackgroundOH || topbarTo != TopBarOP || sliderTo != SliderOP || playbuttonTo != PlayButtonOP)
+            if(bgtopTo != BgTopOP || bgbotTo != BgBotOP || sliderTo != SliderOP || playbuttonTo != PlayButtonOP)
                 flag = false;
 
-            bgTo -= speed*2;
-            topbarTo -= speed;
+            bgtopTo -= speed;
+            bgbotTo += speed;
             sliderTo -= speed;
             playbuttonTo  += speed;
 
-            bgTo = bgTo <= BackgroundOH ? BackgroundOH : bgTo;
-            topbarTo = topbarTo <= TopBarOP ? TopBarOP : topbarTo;
+            bgtopTo = bgtopTo <= BgTopOP ? BgTopOP : bgtopTo;
+            bgbotTo = bgbotTo >= BgBotOP ? BgBotOP : bgbotTo;
             sliderTo = sliderTo <= SliderOP ? SliderOP : sliderTo;
             playbuttonTo = playbuttonTo >= PlayButtonOP ? PlayButtonOP : playbuttonTo;
         } else {
-            if(bgTo != BackgroundMH || topbarTo != TopBarMP || sliderTo != SliderMP || playbuttonTo != PlayButtonMP)
+            if(bgtopTo != BgTopOP || bgbotTo != BgBotOP || sliderTo != SliderOP || playbuttonTo != PlayButtonOP)
                 flag = false;
-
-            bgTo += speed*2;
-            topbarTo += speed;
+            
+            bgtopTo += speed;
+            bgbotTo -= speed;
             sliderTo += speed;
             playbuttonTo -= speed;
 
-            bgTo = bgTo >= BackgroundMH ? BackgroundMH : bgTo;
-            topbarTo = topbarTo >= TopBarMP ? TopBarMP : topbarTo;
+            bgtopTo = bgtopTo >= BgTopMP ? BgTopMP : bgtopTo;
+            bgbotTo = bgbotTo <= BgBotMP ? BgBotMP : bgbotTo;
             sliderTo = sliderTo >= SliderMP ? SliderMP : sliderTo;
             playbuttonTo = playbuttonTo <= PlayButtonMP ? PlayButtonMP : playbuttonTo;
         }
         
-        bg.sizeDelta = new Vector2(bg.sizeDelta.x, bgTo);
-        topbar.localPosition = new Vector3(0f, topbarTo, 0f);
+        bgtop.localPosition = new Vector3(0f, bgtopTo, 0f);
+        bgbot.localPosition = new Vector3(0f, bgbotTo, 0f);
         slider.localPosition = new Vector3(0f, sliderTo, 0f);
         playbutton.localPosition = new Vector3(0f, playbuttonTo, 0f);
 
