@@ -6,8 +6,10 @@ public class Film_Artist : MonoBehaviour {
 
 	void Start () {
         originalPos = transform.position;
-
-        if(PlayerData.Player.Level >= GetComponent<NPC>().Stage-1) {
+        
+        if(PlayerData.Player.Level == GetComponent<NPC>().Stage-2)
+            PlayerData.Player.Level = GetComponent<NPC>().Stage-3;
+        else if(PlayerData.Player.Level >= GetComponent<NPC>().Stage-1) {
             GameObject.Find("3F-Rooftop/Outside").GetComponent<Entrance>().Locked = false;
             GameObject.Find("3F-Rooftop/Inside").GetComponent<Entrance>().Locked = false;
         }
