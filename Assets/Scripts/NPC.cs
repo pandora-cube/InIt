@@ -85,8 +85,6 @@ public class NPC : MonoBehaviour {
     }
 
     void OnCommandEnd() {
-        Debug.Log(string.Format("{0} End", commandIndex));
-
         eventReservated = false;
         
         if(GetComponents<Rigidbody2D>().Length > 0) {
