@@ -4,7 +4,10 @@ using System.Collections;
 public class CharacterMove : MonoBehaviour {
     public float moveSpeed = 3f;    // 이동 속도
     public int animSpeed = 3;       // 애니메이션 재생 속도
-    public Sprite[] runningSprites; // 달리기 스프라이트
+    public Sprite[] upSprites;      // 상향 이동 스프라이트
+    public Sprite[] downSprites;    // 하향 이동 스프라이트
+    public Sprite[] leftSprites;    // 좌향 이동 스프라이트
+    public Sprite[] rightSprites;   // 우향 이동 스프라이트
     public bool canmove = true;     // 캐릭터 이동 가능 여부
     
     float backgroundPosX;           // 배경의 X좌표
@@ -13,20 +16,14 @@ public class CharacterMove : MonoBehaviour {
     float backgroundHeight;         // 배경의 높이
     float cameraWidth;              // 화면의 두께
     float cameraHeight;             // 화면의 높이
-    Sprite standingSprite;          // 정지상태 스프라이트
-    int animIndex;                  // 애니메이션 재생 인덱스
+    int animDirection = 1;          // 애니메이션 방향 (0: 상, 1: 하, 2: 좌, 3: 우)
+    int animIndex = 0;              // 애니메이션 재생 인덱스
     
 	void Start() {
         // 초기화
         GetBackgroundStatus();
         cameraHeight = 2f * Camera.main.orthographicSize;
         cameraWidth = cameraHeight * Camera.main.aspect;
-        standingSprite = GetComponent<SpriteRenderer>().sprite;
-	    animIndex = 0;
-        
-        // 디버깅 메시지 출력
-        Debug.Log(string.Format("Background: {0}, {1}", backgroundWidth, backgroundHeight));
-        Debug.Log(string.Format("Camera: {0}, {1}", cameraWidth, cameraHeight));
 	}
 	
 	void Update() {
@@ -43,58 +40,70 @@ public class CharacterMove : MonoBehaviour {
         }
 
         // 이동중 여부 체크 변수
-        bool isrunning = false;
+        bool ismoving = false;
         // 캐릭터 스프라이트
         SpriteRenderer charspr = GetComponent<SpriteRenderer>();
 
         /* 캐릭터 이동 */
-        float speedX, speedY;
-        speedX = speedY = 0f;
-
-        // 좌향 이동
-        if(Input.GetKey(KeyCode.LeftArrow)) {
-            isrunning = true;
-            speedX -= moveSpeed;
-            // 방향 처리
-            charspr.flipX = true;
-        }
-        // 우향 이동
-        if(Input.GetKey(KeyCode.RightArrow)) {
-            isrunning = true;
-            speedX += moveSpeed;
-            // 방향 처리
-            charspr.flipX = false;
-        }
+        float speedX = 0f, speedY = 0f;
+        int direction = 1;
+        
         // 상향 이동
         if(Input.GetKey(KeyCode.UpArrow)) {
-            isrunning = true;
+            ismoving = true;
             speedY += moveSpeed;
+            direction = 0;
         }
         // 하향 이동
         if(Input.GetKey(KeyCode.DownArrow)) {
-            isrunning = true;
+            ismoving = true;
             speedY -= moveSpeed;
+            direction = 1;
+        }
+        // 좌향 이동
+        if(Input.GetKey(KeyCode.LeftArrow)) {
+            ismoving = true;
+            speedX -= moveSpeed;
+            direction = 2;
+        }
+        // 우향 이동
+        if(Input.GetKey(KeyCode.RightArrow)) {
+            ismoving = true;
+            speedX += moveSpeed;
+            direction = 3;
         }
         
         // 이동중인 경우
-        if(isrunning) {
+        if(ismoving) {
             // 정지 해제
             GetComponent<Rigidbody2D>().isKinematic = false;
             // 속도 처리
             GetComponent<Rigidbody2D>().velocity = new Vector3(speedX, speedY, 0f);
-
-            // 달리기 애니메이션 인덱스 처리
-            animIndex++;
-            if(animIndex/animSpeed >= runningSprites.Length)
-                animIndex = 0;
-            // 달리기 스프라이트 이미지로 전환
-            charspr.sprite = runningSprites[animIndex/animSpeed];
+            // 이동 애니메이션 적용
+            SetMoveAnimation(direction);
         } else {
             // 정지
             GetComponent<Rigidbody2D>().isKinematic = true;
-
             // 스프라이트 초기화
-            charspr.sprite = standingSprite;
+            Sprite sprite;
+            switch(animDirection) {
+                case 0:
+                    sprite = upSprites[0];
+                    break;
+                case 1:
+                    sprite = downSprites[0];
+                    break;
+                case 2:
+                    sprite = leftSprites[0];
+                    break;
+                case 3:
+                    sprite = rightSprites[0];
+                    break;
+                default:
+                    sprite = downSprites[0];
+                    break;
+            }
+            charspr.sprite = sprite;
         }
 
         // 캐릭터 좌표 데이터 갱신
@@ -148,6 +157,39 @@ public class CharacterMove : MonoBehaviour {
         // 화면 좌표를 캐릭터 좌표와 동기화
         Camera.main.transform.position = new Vector3(campos_moved.x, campos_moved.y, campos_moved.z);
 	}
+
+    void SetMoveAnimation(int direction) {
+        Sprite[] moveSprites;
+        switch(direction) {
+            case 0:
+                moveSprites = upSprites;
+                break;
+            case 1:
+                moveSprites = downSprites;
+                break;
+            case 2:
+                moveSprites = leftSprites;
+                break;
+            case 3:
+                moveSprites = rightSprites;
+                break;
+            default:
+                moveSprites = downSprites;
+                break;
+        }
+
+        if(animDirection != direction) {
+            animDirection = direction;
+            animIndex = 0;
+        } else {
+            animIndex++;
+            if(animIndex/animSpeed >= moveSprites.Length)
+                animIndex = 0;
+        }
+
+        // 이동 스프라이트 적용
+        GetComponent<SpriteRenderer>().sprite = moveSprites[animIndex/animSpeed];
+    }
 
     void OnCollisionEnter2D(Collision2D col) {
         // 출입구 영역으로 들어온 경우
