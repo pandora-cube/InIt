@@ -54,6 +54,7 @@ public class NPC : MonoBehaviour {
          *  NPC.Update()
          *      레벨에 따른 네임태그 강조
          *      명령 이행
+         *      대화
          */
 
         /* 레벨에 따른 네임태그 강조 */
@@ -71,6 +72,14 @@ public class NPC : MonoBehaviour {
         /* 명령 이행 */
         if(Executed && Commands.Length > commandIndex)
             OnCommandUpdate();
+
+        /* 대화 */
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+
+        // 이 NPC를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
+        if(Input.GetMouseButtonDown(0) && hit && hit.collider.gameObject == gameObject && Collided)
+            GameObject.Find("Dialogue UI").GetComponent<Dialogue>().Talk(this);
     }
 
     void OnCollisionEnter2D(Collision2D col) {
