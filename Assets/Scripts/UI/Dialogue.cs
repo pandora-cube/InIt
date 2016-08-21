@@ -175,6 +175,8 @@ public class Dialogue : MonoBehaviour {
                 // 대화 UI 출력
                 if(npc.dontChat)
                     Talk(npc);
+                else if(npc.Name == "외국인")
+                    ShowDialogue(npc.Name, "Na malgo another peoplehante go go.");
                 else
                     ShowDialogue(npc.Name, "나 말고 다른 사람한테 먼저 가봐.");
             }
@@ -185,6 +187,8 @@ public class Dialogue : MonoBehaviour {
                 // 대화 UI 출력
                 if(npc.dontChat)
                     Talk(npc);
+                else if(npc.Name == "외국인")
+                    ShowDialogue(npc.Name, "Na halmal no no.");
                 else
                     ShowDialogue(npc.Name, "난 이제 해 줄 말이 없어.");
             }
