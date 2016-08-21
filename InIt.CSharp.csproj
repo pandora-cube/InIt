@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\ScreenFadeInOut.cs" />
     <Compile Include="Assets\Scripts\UI\Dialogue.cs" />
     <Compile Include="Assets\Scripts\UI\GameStart.cs" />
+    <Compile Include="Assets\Scripts\UI\MouseHover.cs" />
     <Compile Include="Assets\Scripts\UI\Nametag.cs" />
     <Compile Include="Assets\Scripts\UI\Option.cs" />
     <Compile Include="Assets\Scripts\UI\Posters.cs" />
