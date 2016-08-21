@@ -22,7 +22,9 @@ public class Nametag : MonoBehaviour {
         TextMesh text = GameObject.Find(tag.name).GetComponent<TextMesh>();
 
         // 네임태그 오브젝트의 텍스트 설정
-        text.text = tagText;
+        text.text = string.Empty;
+        // 네임태그 오브젝트의 텍스트 크기
+        text.fontSize = 30;
         // 초기 상태의 네임태그 색상
         originalColor = text.color;
 	}
@@ -45,6 +47,8 @@ public class Nametag : MonoBehaviour {
 
         /* Blink */
 	    if(Blink) {
+            text.text = "!";
+
             float b = text.color.b + (blinkMode ? Time.deltaTime : -Time.deltaTime) / 2f;
             
             if(b >= .75f)
@@ -54,6 +58,7 @@ public class Nametag : MonoBehaviour {
             
             text.color = new Color(text.color.r, text.color.g, b);
         } else {
+            text.text = string.Empty;
             // 네임태그의 색상을 초기 상태로 복원
             text.color = originalColor;
         }
