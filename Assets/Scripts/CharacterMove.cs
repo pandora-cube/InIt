@@ -214,8 +214,8 @@ public class CharacterMove : MonoBehaviour {
     string GetPlayerArea() {
         // 캐릭터 좌표
         Vector3 chrPos = transform.position;
-        // Y좌표는 BoxCollider를 기준으로 함
-        chrPos.y += GetComponent<BoxCollider2D>().offset.y*2;
+        // Y좌표는 BoxCollider 최하단을 기준으로 함
+        chrPos.y += GetComponent<BoxCollider2D>().offset.y/2f;
 
         foreach(SpriteRenderer spr in GameObject.FindObjectsOfType<SpriteRenderer>()) {
             string[] sprInfo = spr.name.Split('_');
