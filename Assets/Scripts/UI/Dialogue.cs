@@ -68,6 +68,8 @@ public class Dialogue : MonoBehaviour {
         // 이미 대화중인 NPC가 있는 경우
         if(contactedNPC != null)
             return contactedNPC;
+        else if(transform.localScale == new Vector3(1f, 1f, 1f))
+            HideDialogue();
 
         foreach(NPC npc in GameObject.FindObjectsOfType<NPC>()) {
             // 충돌 유지중인 NPC 중 지나간 스테이지의 NPC는 우선순위를 내린다.
