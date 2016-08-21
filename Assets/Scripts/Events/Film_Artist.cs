@@ -23,6 +23,16 @@ public class Film_Artist : MonoBehaviour {
         } else if(PlayerData.Player.Level == GetComponent<NPC>().Stage-2) {
             GameObject.Find("3F-Rooftop/Outside").GetComponent<Entrance>().Locked = false;
             GameObject.Find("3F-Rooftop/Inside").GetComponent<Entrance>().Locked = false;
+            
+            /*while(GetComponents<BoxCollider2D>().Length > 0) {
+                Debug.Log("1");
+                Destroy(GetComponent<BoxCollider2D>());
+            }*/
+            BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
+            BoxCollider2D trigger = gameObject.AddComponent<BoxCollider2D>();
+            collider.size = new Vector2(1.15f, 3.5f);
+            trigger.size = new Vector2(1.4f, 3.75f);
+            trigger.isTrigger = true;
 
             PlayerData.Player.Level = GetComponent<NPC>().Stage-1;
 
