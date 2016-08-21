@@ -137,11 +137,13 @@ public class Dialogue : MonoBehaviour {
             if(PlayerData.Player.Level == npc.Stage-1) {
                 string message = npc.Messages[msgIndex++];
 
-                // 포스터 이미지 출력 명령인 경우
-                if(message == "Poster") {
+                if(message == "Poster") {       // 포스터 이미지 출력 명령인 경우
                     // 포스터 이미지 출력
                     poster.FindChild("Image").GetComponent<Image>().sprite = npc.Poster;
                     poster.localScale = new Vector3(1f, 1f, 1f);
+                } else if(message == "End") {   // 엔딩 실행 명령인 경우
+                    GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
+                    GameObject.Find("Ending").GetComponent<Ending>().Run();
                 } else {
                     // 메시지 중 뒤집기 명령이 포함되어 있는 경우
                     if(message.Contains("{Flip}")) {
@@ -177,6 +179,8 @@ public class Dialogue : MonoBehaviour {
                     Talk(npc);
                 else if(npc.Name == "외국인")
                     ShowDialogue(npc.Name, "Na malgo another peoplehante go go.");
+                else if(npc.Name == "문주한 선배")
+                    ShowDialogue(npc.Name, "아직 너는 포스터를 다 찾지 못했어.\n다 모아야만 동아리 방에 들어올 수 있어.");
                 else
                     ShowDialogue(npc.Name, "나 말고 다른 사람한테 먼저 가봐.");
             }

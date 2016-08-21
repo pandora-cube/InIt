@@ -15,6 +15,7 @@ public class InGame : MonoBehaviour {
             // 현재 시간 등록
             System.DateTime now = System.DateTime.Now;
             PlayerData.Player.CreatedTime = string.Format("{0}년 {1}월 {2}일 {3}시", now.Year, now.Month, now.Day, now.Hour);
+            GameObject.Find("Prologue").GetComponent<Prologue>().Run();
         }
     }
     
