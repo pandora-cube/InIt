@@ -18,6 +18,7 @@ public class NPC : MonoBehaviour {
     public int animSpeed = 3;           // 애니메이션 재생 속도
     public Sprite[] movingSprites;      // 이동 애니메이션 스프라이트 (오른쪽을 보고 있어야 함)
     public COMMAND[] Commands;          // 명령
+    public bool Collided = false;       // 접촉 여부
 
     bool eventReservated = false;       // 명령 종료 이벤트 예약 여부
     bool Executed = false;              // 명령 이행 여부

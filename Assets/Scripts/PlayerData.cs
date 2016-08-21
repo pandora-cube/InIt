@@ -26,7 +26,6 @@ public class PlayerData {
     public static OPTION Option = new OPTION();
 
     public static bool flagLoadPlayerData = true;
-    public static string collidedNPC = string.Empty;
 
     public static void DeletePlayerData() {
         PlayerPrefs.DeleteKey("PlayerData");

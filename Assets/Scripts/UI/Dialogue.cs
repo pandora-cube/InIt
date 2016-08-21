@@ -11,7 +11,7 @@ public class Dialogue : MonoBehaviour {
     Transform uiObj;                    // UI 오브젝트
     Transform dialogueObj;              // 메시지 오브젝트
     Transform posterObj;                // 포스터 오브젝트
-    string contactedNPC = string.Empty; // 현재 대화중인 NPC
+    NPC contactedNPC = null;            // 현재 대화중인 NPC
     string msgResult;                   // 메시지 내용
     int msgLength;                      // 메시지 길이
     int msgIndex = 0;                   // 메시지 인덱스
@@ -36,7 +36,9 @@ public class Dialogue : MonoBehaviour {
         /* NPC 대화 처리 */
         // Space 혹은 Enter 키를 누른 경우
         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
-            Talk();
+            NPC npc = FindContactNPC();
+            if(npc != null)
+                Talk(npc);
         }
 
         /* Blinker 깜빡거리기 */
@@ -56,14 +58,30 @@ public class Dialogue : MonoBehaviour {
     }
 
     public void OnClick() {
-        Talk();
+        if(contactedNPC != null)
+            Talk(contactedNPC);
+    }
+
+    NPC FindContactNPC() {
+        NPC temp = null;
+
+        // 이미 대화중인 NPC가 있는 경우
+        if(contactedNPC != null)
+            return contactedNPC;
+
+        foreach(NPC npc in GameObject.FindObjectsOfType<NPC>()) {
+            // 충돌 유지중인 NPC 중 지나간 스테이지의 NPC는 우선순위를 내린다.
+            if(npc.Collided && ((temp != null && temp.Stage <= PlayerData.Player.Level) || temp == null))
+                temp = npc;
+        }
+        return temp;
     }
 
     void ToggleTalk() {
         talkToggle = false;
     }
 
-    public void Talk() {
+    public void Talk(NPC npc) {
         if(talkToggle)
             return;
         talkToggle = true;
@@ -71,24 +89,24 @@ public class Dialogue : MonoBehaviour {
 
         // 포스터 이미지
         Transform poster = transform.FindChild("Canvas").FindChild("Poster");
-        // 상대 NPC 이름
+        /*// 상대 NPC 이름
         string npcName = contactedNPC.Length > 0 ? contactedNPC : PlayerData.collidedNPC;
         // 상대 NPC
-        NPC npc;
+        NPC npc;*/
 
         if(msgCount != 0) {
             msgCount = msgLength-1;
             return;
         }
 
-        // 충돌 유지중이거나 대화중인 NPC가 없는 경우
+        /*// 충돌 유지중이거나 대화중인 NPC가 없는 경우
         if(npcName.Length < 1) {
             if(transform.localScale == new Vector3(1f, 1f, 1f))
                 HideDialogue();
             Debug.Log("[Talk Debug] 상대 NPC 없음");
             return;
         } else
-            npc = GameObject.Find(npcName).GetComponent<NPC>();
+            npc = GameObject.Find(npcName).GetComponent<NPC>();*/
 
         // 메뉴가 활성화되어 있는 경우
         if(GameObject.Find("Menu UI").transform.localScale == new Vector3(1f, 1f, 1f)) {
@@ -99,7 +117,7 @@ public class Dialogue : MonoBehaviour {
             Debug.Log("[Talk Debug] 대화 거부 OR 대사 없음");
 
             // 상대 NPC 없음
-            contactedNPC = string.Empty;
+            contactedNPC = null;
             // 대화 UI 숨김
             HideDialogue();
             // 레벨 설정
@@ -111,7 +129,7 @@ public class Dialogue : MonoBehaviour {
         // 대사가 있는 경우
         else if(npc.Messages.Length > 0) {
             // 상대 NPC 이름
-            contactedNPC = npc.transform.name;
+            contactedNPC = npc;
 
             // 이 NPC와 대화할 적정 단계인 경우
             if(PlayerData.Player.Level == npc.Stage-1) {
@@ -154,7 +172,7 @@ public class Dialogue : MonoBehaviour {
                 msgIndex = -1;
                 // 대화 UI 출력
                 if(npc.dontChat)
-                    Talk();
+                    Talk(npc);
                 else
                     ShowDialogue(npc.Name, "나 말고 다른 사람한테 먼저 가봐.");
             }
@@ -164,7 +182,7 @@ public class Dialogue : MonoBehaviour {
                 msgIndex = -1;
                 // 대화 UI 출력
                 if(npc.dontChat)
-                    Talk();
+                    Talk(npc);
                 else
                     ShowDialogue(npc.Name, "난 이제 해 줄 말이 없어.");
             }
