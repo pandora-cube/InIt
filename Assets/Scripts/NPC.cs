@@ -44,7 +44,7 @@ public class NPC : MonoBehaviour {
         // Trigger로 설정
         trigger.isTrigger = true;
         // 영역을 충돌 처리 Collider보다 크게 설정
-        trigger.size = new Vector2(original.size.x+.25f, original.size.y+.25f);
+        trigger.size = new Vector2(original.size.x+.5f, original.size.y+.5f);
         // Offset을 원점으로 설정
         trigger.offset = new Vector2(0f, 0f);
     }
