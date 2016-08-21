@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\CloudMove.cs" />
     <Compile Include="Assets\Scripts\Entrance.cs" />
     <Compile Include="Assets\Scripts\Events\Film_Artist.cs" />
+    <Compile Include="Assets\Scripts\Events\Juhan_Moon.cs" />
     <Compile Include="Assets\Scripts\Events\ThirdFloor_Toilet.cs" />
     <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
