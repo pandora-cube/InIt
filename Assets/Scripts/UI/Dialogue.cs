@@ -123,7 +123,7 @@ public class Dialogue : MonoBehaviour {
             // 대화 UI 숨김
             HideDialogue();
             // 레벨 설정
-            if(msgIndex != -1)
+            if(msgIndex != -1 && npc.Stage != 0)
                 PlayerData.Player.Level = npc.Stage;
             // 대사 인덱스 초기화
             msgIndex = 0;
@@ -134,7 +134,7 @@ public class Dialogue : MonoBehaviour {
             contactedNPC = npc;
 
             // 이 NPC와 대화할 적정 단계인 경우
-            if(PlayerData.Player.Level == npc.Stage-1) {
+            if(PlayerData.Player.Level == npc.Stage-1 || npc.Stage == 0) {
                 string message = npc.Messages[msgIndex++];
 
                 if(message == "Poster") {       // 포스터 이미지 출력 명령인 경우
@@ -179,6 +179,8 @@ public class Dialogue : MonoBehaviour {
                     Talk(npc);
                 else if(npc.Name == "외국인")
                     ShowDialogue(npc.Name, "Na malgo another peoplehante go go.");
+                else if(npc.Name == "오리")
+                    ShowDialogue("오리", "꺼져");
                 else if(npc.Name == "문주한 선배")
                     ShowDialogue(npc.Name, "아직 너는 포스터를 다 찾지 못했어.\n다 모아야만 동아리 방에 들어올 수 있어.");
                 else
@@ -193,6 +195,8 @@ public class Dialogue : MonoBehaviour {
                     Talk(npc);
                 else if(npc.Name == "외국인")
                     ShowDialogue(npc.Name, "Na halmal no no.");
+                else if(npc.Name == "오리")
+                    ShowDialogue("오리", "꺼져");
                 else
                     ShowDialogue(npc.Name, "난 이제 해 줄 말이 없어.");
             }
@@ -218,7 +222,7 @@ public class Dialogue : MonoBehaviour {
 
     void HideDialogue() {
         // 오브젝트 숨김
-        uiObj.localScale = dialogueObj.localScale = posterObj.localScale = new Vector3(0f, 0f, 0f);
+        uiObj.localScale = dialogueObj.localScale = posterObj.localScale = dialogueObj.FindChild("Duck").localScale = new Vector3(0f, 0f, 0f);
         // 타이머 강제 해제
         CancelInvoke("PrintMessage");
         // 캐릭터 이동 가능
@@ -233,6 +237,11 @@ public class Dialogue : MonoBehaviour {
         dialogueObj.FindChild("Name").GetComponent<Text>().text = name;
         // Dialogue UI 활성화
         uiObj.localScale = dialogueObj.localScale =  new Vector3(1f, 1f, 1f);
+
+        if(name == "오리")
+            dialogueObj.FindChild("Duck").localScale = new Vector3(1f, 1f, 1f);
+        else
+            dialogueObj.FindChild("Duck").localScale = new Vector3(0f, 0f, 0f);
         
         msgResult = result.Replace("\\n", "\n");            // 줄바꿈 문자 변환
         msgLength = msgResult.Length;                       // 메시지 길이
