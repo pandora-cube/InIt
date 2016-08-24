@@ -19,6 +19,10 @@ public class Ending : MonoBehaviour {
     void Update() {
         switch(Step) {
             case 1:
+                foreach(AudioSource audio in GameObject.FindObjectsOfType<AudioSource>())
+                    audio.mute = true;
+                transform.FindChild("BGM").GetComponent<AudioSource>().mute = false;
+                transform.FindChild("BGM").GetComponent<AudioSource>().time = 0f;
                 transform.localScale = new Vector3(1f, 1f, 1f);
                 Fade("Background", fadeSpeed/3f);
                 break;
@@ -94,7 +98,7 @@ public class Ending : MonoBehaviour {
             case 22:
                 Delay();
                 break;
-            case 23:
+            case 24:
                 SceneManager.LoadScene("Scenes/Intro");
                 break;
         }
