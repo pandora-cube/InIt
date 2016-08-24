@@ -98,7 +98,7 @@ public class Ending : MonoBehaviour {
             case 22:
                 Delay();
                 break;
-            case 24:
+            case 23:
                 SceneManager.LoadScene("Scenes/Intro");
                 break;
         }
