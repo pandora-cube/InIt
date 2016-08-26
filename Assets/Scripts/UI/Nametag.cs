@@ -77,6 +77,7 @@ public class Nametag : MonoBehaviour {
 
     public void SetNametagText(string text) {
         GameObject.Find(tag.name).GetComponent<TextMesh>().text = text;
+        GameObject.Find(tag.name).GetComponent<BoxCollider2D>().enabled = text.Length != 0;
         textChanged = true;
         CancelInvoke("SetNametagTextToDefault");
         Invoke("SetNametagTextToDefault", 2f);
