@@ -11,7 +11,7 @@ public class Entrance : MonoBehaviour {
         if(Locked) {
             if(dest_ == null)
                 GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("문", "굳게 잠겨 있다.");
-            dest.position = new Vector3(transform.position.x, transform.position.y, dest.position.z);
+            //dest.position = new Vector3(transform.position.x, transform.position.y, dest.position.z);
 
             return;
         }
@@ -21,7 +21,7 @@ public class Entrance : MonoBehaviour {
         // [1] 충돌한 출입구의 방향 (Outside or Inside)
         string[] objInfo = name.Split('/');
         // 반대편 출입구 이름
-        string entrance = objInfo[0] + "/" + ((objInfo[1] == "Outside") ? "Inside" : "Outside");
+        string entrance = objInfo[0] + "/" + (objInfo[1] == "Outside" ? "Inside" : "Outside");
         // 반대편 출입구
         Transform other = GameObject.Find(entrance).transform;
             
