@@ -11,6 +11,7 @@ public class Nametag : MonoBehaviour {
     string tagName;                 // 네임태그 오브젝트의 이름
     Color originalColor;            // 네임태그의 초기 색상
     bool blinkMode = true;          // 이 속성이 참이면 강조 처리중 네임태그 색상의 R값이 더해짐
+    bool textChanged = false;       // 네임태그의 텍스트가 변경되었는가
 
 	void Start() {
         // 네임태그 오브젝트 생성
@@ -23,6 +24,8 @@ public class Nametag : MonoBehaviour {
 
         // 네임태그 오브젝트의 텍스트 설정
         text.text = string.Empty;
+        // 네임태그 비활성화
+        text.GetComponent<BoxCollider2D>().enabled = false;
         // 네임태그 오브젝트의 텍스트 크기
         text.fontSize = 30;
         // 초기 상태의 네임태그 색상
@@ -34,6 +37,7 @@ public class Nametag : MonoBehaviour {
          *  Nametag.Update()
          *      좌표 동기화
          *      Blink
+         *      텍스트 설정
          */
         
         /* 좌표 동기화 */
@@ -47,8 +51,6 @@ public class Nametag : MonoBehaviour {
 
         /* Blink */
 	    if(Blink) {
-            text.text = "CLICK ME";
-
             float r = text.color.r + (blinkMode ? Time.deltaTime : -Time.deltaTime) / 2f;
             
             if(r >= .75f)
@@ -58,9 +60,27 @@ public class Nametag : MonoBehaviour {
             
             text.color = new Color(r, text.color.g, text.color.b);
         } else {
-            text.text = string.Empty;
             // 네임태그의 색상을 초기 상태로 복원
             text.color = originalColor;
         }
+
+        /* 텍스트 설정 */
+        if(!textChanged)
+            SetNametagTextToDefault();
 	}
+
+    public void SetNametagTextToDefault() {
+        TextMesh text = GameObject.Find(tag.name).GetComponent<TextMesh>();
+
+        text.text = Blink ? "CLICK ME" : string.Empty;
+        text.GetComponent<BoxCollider2D>().enabled = Blink;
+        textChanged = false;
+    }
+
+    public void SetNametagText(string text) {
+        GameObject.Find(tag.name).GetComponent<TextMesh>().text = text;
+        textChanged = true;
+        CancelInvoke("SetNametagTextToDefault");
+        Invoke("SetNametagTextToDefault", 2f);
+    }
 }
