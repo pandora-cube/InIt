@@ -9,8 +9,8 @@ public class Entrance : MonoBehaviour {
 
         // 잠긴 경우
         if(Locked) {
-            if(dest_ == null)
-                GameObject.Find("Dialogue UI").GetComponent<Dialogue>().ShowDialogue("문", "굳게 잠겨 있다.");
+            if(dest_ == null && dest.GetComponents<Nametag>().Length > 0)
+                dest.GetComponent<Nametag>().SetNametagText("잠겨있다");
             //dest.position = new Vector3(transform.position.x, transform.position.y, dest.position.z);
 
             return;
