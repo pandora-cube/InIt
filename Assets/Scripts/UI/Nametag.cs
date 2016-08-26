@@ -22,10 +22,8 @@ public class Nametag : MonoBehaviour {
         // 네임태그의 TextMesh 컴포넌트
         TextMesh text = GameObject.Find(tag.name).GetComponent<TextMesh>();
 
-        // 네임태그 오브젝트의 텍스트 설정
-        text.text = string.Empty;
-        // 네임태그 비활성화
-        text.GetComponent<BoxCollider2D>().enabled = false;
+        // 네임태그 오브젝트의 텍스트 초기화
+        SetNametagTextToDefault();
         // 네임태그 오브젝트의 텍스트 크기
         text.fontSize = 30;
         // 초기 상태의 네임태그 색상
@@ -72,8 +70,8 @@ public class Nametag : MonoBehaviour {
     public void SetNametagTextToDefault() {
         TextMesh text = GameObject.Find(tag.name).GetComponent<TextMesh>();
 
-        text.text = Blink ? "클릭하세요" : string.Empty;
-        text.GetComponent<BoxCollider2D>().enabled = Blink;
+        text.text = Blink ? "클릭하세요" : tagText;
+        text.GetComponent<BoxCollider2D>().enabled = text.text.Length != 0;
         textChanged = false;
     }
 
