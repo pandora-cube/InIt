@@ -47,16 +47,16 @@ public class Nametag : MonoBehaviour {
 
         /* Blink */
 	    if(Blink) {
-            text.text = "!";
+            text.text = "CLICK ME";
 
-            float b = text.color.b + (blinkMode ? Time.deltaTime : -Time.deltaTime) / 2f;
+            float r = text.color.r + (blinkMode ? Time.deltaTime : -Time.deltaTime) / 2f;
             
-            if(b >= .75f)
+            if(r >= .75f)
                 blinkMode = false;
-            else if(b <= .2f)
+            else if(r <= .2f)
                 blinkMode = true;
             
-            text.color = new Color(text.color.r, text.color.g, b);
+            text.color = new Color(r, text.color.g, text.color.b);
         } else {
             text.text = string.Empty;
             // 네임태그의 색상을 초기 상태로 복원
