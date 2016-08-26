@@ -9,8 +9,8 @@ public class Intro : MonoBehaviour {
     bool delayToggle = false;
 
     void Start() {
-        // 화면 크기 조정 (960 x 540)
-        Screen.SetResolution(960, 540, false);
+        // 화면 크기 조정 (1920 x 1080)
+        Screen.SetResolution(1920, 1080, true);
     }
 
     void Update() {
