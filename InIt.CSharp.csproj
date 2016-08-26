@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Events\ThirdFloor_Toilet.cs" />
     <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Resolution.cs" />
     <Compile Include="Assets\Scripts\Scenes\InGame.cs" />
     <Compile Include="Assets\Scripts\Scenes\Intro.cs" />
     <Compile Include="Assets\Scripts\Scenes\Main.cs" />
