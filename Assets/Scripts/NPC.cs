@@ -81,8 +81,10 @@ public class NPC : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 
-        // 이 NPC를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
-        if(Input.GetMouseButtonDown(0) && hit && hit.collider.gameObject == gameObject && Collided)
+        // 이 NPC 혹은 네임태그를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
+        if(Input.GetMouseButtonDown(0) && hit && Collided
+            && (hit.collider.gameObject == gameObject
+            || (GetComponents<Nametag>().Length > 0 && hit.collider.gameObject == GameObject.Find("Nametag/NPC/" + name))))
             GameObject.Find("Dialogue UI").GetComponent<Dialogue>().Talk(this);
     }
 
