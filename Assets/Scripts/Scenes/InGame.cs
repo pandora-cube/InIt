@@ -47,7 +47,7 @@ public class InGame : MonoBehaviour {
                 if(faderui.localScale == new Vector3(0f, 0f, 0f)) { // Screen Fader가 비활성화 되어 있는 경우
                     // Screen Fader Fade In
                     fader.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
-                    fader.GetComponent<ScreenFader>().endOpacity = .6f;
+                    fader.GetComponent<ScreenFader>().endOpacity = .75f;
                     // Screen Fader 활성화
                     faderui.localScale = new Vector3(1f, 1f, 1f);
                 
