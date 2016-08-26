@@ -191,8 +191,8 @@ public class CharacterMove : MonoBehaviour {
         GetComponent<SpriteRenderer>().sprite = moveSprites[animIndex/animSpeed];
     }
 
-    void OnCollisionEnter2D(Collision2D col) {
-        // 출입구 영역으로 들어온 경우
+    void OnCollisionStay2D(Collision2D col) {
+        // 출입구 영역에 있는 경우
         if(col.gameObject.GetComponents<Entrance>().Length > 0) {
             col.gameObject.GetComponent<Entrance>().OnEnter();
         }
