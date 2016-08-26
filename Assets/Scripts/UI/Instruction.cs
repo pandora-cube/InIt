@@ -8,15 +8,19 @@ public class Instruction : MonoBehaviour {
     }
 
     void Update() {
-        bool findingPoster = false;
-
-        foreach(NPC npc in GameObject.FindObjectsOfType<NPC>())
-            if(npc.Stage == PlayerData.Player.Level+1 && npc.name.StartsWith("Poster")) {
-                findingPoster = true;
-                ShowMessage(string.Format("{0}번째 포스터를 찾으세요!", npc.name.Substring(npc.name.Length-1)));
-            }
-        if(!findingPoster)
+        if(GameObject.Find("Dialogue UI").transform.localScale == new Vector3(1f, 1f, 1f)) {
             HideMessage();
+        } else {
+            bool findingPoster = false;
+
+            foreach(NPC npc in GameObject.FindObjectsOfType<NPC>())
+                if(npc.Stage == PlayerData.Player.Level+1 && npc.name.StartsWith("Poster")) {
+                    findingPoster = true;
+                    ShowMessage(string.Format("{0}번째 포스터를 찾으세요!", npc.name.Substring(npc.name.Length-1)));
+                }
+            if(!findingPoster)
+                HideMessage();
+        }
     }
     
 	public void ShowMessage(string message, float time=0f) {
