@@ -30,11 +30,13 @@ public class InGame : MonoBehaviour {
         Transform faderui = GameObject.Find("Screen Fader UI").transform;
         Transform fader = GameObject.Find("Screen Fader").transform;
         Transform menu = GameObject.Find("Menu UI").transform;
+        Vector3 disabledScale = new Vector3(0f, 0f, 0f);
         
 	    if(Input.GetKeyDown(KeyCode.Escape)
-            && GameObject.Find("Dialogue UI").transform.localScale == new Vector3(0f, 0f, 0f)
-            && GameObject.Find("Option UI").transform.localScale == new Vector3(0f, 0f, 0f)
-            && GameObject.Find("Posters UI").transform.localScale == new Vector3(0f, 0f, 0f)) {
+            && GameObject.Find("Dialogue UI").transform.localScale == disabledScale
+            && GameObject.Find("Option UI").transform.localScale == disabledScale
+            && GameObject.Find("Posters UI").transform.localScale == disabledScale
+            && GameObject.Find("Hints UI").transform.localScale == disabledScale) {
             // Screen Fader가 비활성화 되어 있는 경우
             if(faderui.localScale == new Vector3(0f, 0f, 0f)) {
                 // Screen Fader Fade In
