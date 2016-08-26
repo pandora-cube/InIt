@@ -72,7 +72,7 @@ public class Nametag : MonoBehaviour {
     public void SetNametagTextToDefault() {
         TextMesh text = GameObject.Find(tag.name).GetComponent<TextMesh>();
 
-        text.text = Blink ? "CLICK ME" : string.Empty;
+        text.text = Blink ? "클릭하세요" : string.Empty;
         text.GetComponent<BoxCollider2D>().enabled = Blink;
         textChanged = false;
     }

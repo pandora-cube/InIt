@@ -88,7 +88,7 @@ public class NPC : MonoBehaviour {
             if(Collided)
                 GameObject.Find("Dialogue UI").GetComponent<Dialogue>().Talk(this);
             else if(GetComponents<Nametag>().Length > 0)
-                GetComponent<Nametag>().SetNametagText("TOO FAR");
+                GetComponent<Nametag>().SetNametagText("너무 멉니다");
     }
 
     void OnCollisionEnter2D(Collision2D col) {
