@@ -75,7 +75,6 @@
     <Compile Include="Assets\Scripts\Scenes\InGame.cs" />
     <Compile Include="Assets\Scripts\Scenes\Intro.cs" />
     <Compile Include="Assets\Scripts\Scenes\Main.cs" />
-    <Compile Include="Assets\Scripts\ScreenFadeInOut.cs" />
     <Compile Include="Assets\Scripts\UI\Dialogue.cs" />
     <Compile Include="Assets\Scripts\UI\GameStart.cs" />
     <Compile Include="Assets\Scripts\UI\Hints.cs" />
