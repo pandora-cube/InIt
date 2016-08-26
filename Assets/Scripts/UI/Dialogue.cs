@@ -170,14 +170,8 @@ public class Dialogue : MonoBehaviour {
                 // 대화 UI 출력
                 if(npc.dontChat)
                     Talk(npc);
-                else if(npc.Name == "외국인")
-                    ShowDialogue(npc.Name, "Na malgo another peoplehante go go.");
-                else if(npc.Name == "오리")
-                    ShowDialogue("오리", "꺼져");
-                else if(npc.Name == "문주한 선배")
-                    ShowDialogue(npc.Name, "아직 너는 포스터를 다 찾지 못했어.\n다 모아야만 동아리 방에 들어올 수 있어.");
                 else
-                    ShowDialogue(npc.Name, "나 말고 다른 사람한테 먼저 가봐.");
+                    ShowDialogue(npc.Name, npc.preStageMessage);
             }
             // 플레이어의 진행도가 높은 경우
             else if(PlayerData.Player.Level > npc.Stage-1 && npc.Stage != 0) {
@@ -186,12 +180,8 @@ public class Dialogue : MonoBehaviour {
                 // 대화 UI 출력
                 if(npc.dontChat)
                     Talk(npc);
-                else if(npc.Name == "외국인")
-                    ShowDialogue(npc.Name, "Na halmal no no.");
-                else if(npc.Name == "오리")
-                    ShowDialogue("오리", "꺼져");
                 else
-                    ShowDialogue(npc.Name, "난 이제 해 줄 말이 없어.");
+                    ShowDialogue(npc.Name, npc.afterStageMessage);
             }
         }
     }

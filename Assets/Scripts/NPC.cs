@@ -19,6 +19,10 @@ public class NPC : MonoBehaviour {
     public Sprite[] movingSprites;      // 이동 애니메이션 스프라이트 (오른쪽을 보고 있어야 함)
     public COMMAND[] Commands;          // 명령
     public bool Collided = false;       // 접촉 여부
+    // 적정 스테이지 전에 대화 시도 시 출력할 메시지
+    public string preStageMessage = "나 말고 다른 사람한테 먼저 가봐.";
+    // 적정 스테이지 후에 대화 시도 시 출력할 메시지
+    public string afterStageMessage = "난 이제 해 줄 말이 없어.";
 
     bool eventReservated = false;       // 명령 종료 이벤트 예약 여부
     bool Executed = false;              // 명령 이행 여부
