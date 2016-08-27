@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Events\Film_Artist.cs" />
     <Compile Include="Assets\Scripts\Events\Prologue.cs" />
     <Compile Include="Assets\Scripts\Events\ThirdFloor_Toilet.cs" />
+    <Compile Include="Assets\Scripts\Layer.cs" />
     <Compile Include="Assets\Scripts\NPC.cs" />
     <Compile Include="Assets\Scripts\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Resolution.cs" />
