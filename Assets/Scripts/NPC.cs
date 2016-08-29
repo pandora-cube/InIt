@@ -35,6 +35,7 @@ public class NPC : MonoBehaviour {
          *  NPC.Start()
          *      초기화
          *      대화 가능 영역 트리거 추가
+         *      마우스 클릭 영역 트리거 추가
          */
         
         /* 초기화 */
@@ -44,13 +45,23 @@ public class NPC : MonoBehaviour {
         // 기존에 존재하던 충돌 처리 용도의 BoxCollider2D
         BoxCollider2D original = GetComponent<BoxCollider2D>();
         // 대화 가능 영역 검사 용도의 Collider 생성
-        BoxCollider2D trigger = gameObject.AddComponent<BoxCollider2D>();
+        BoxCollider2D talkTrigger = gameObject.AddComponent<BoxCollider2D>();
         // Trigger로 설정
-        trigger.isTrigger = true;
+        talkTrigger.isTrigger = true;
         // 영역을 충돌 처리 Collider보다 크게 설정
-        trigger.size = new Vector2(original.size.x+.5f, original.size.y+.5f);
+        talkTrigger.size = new Vector2(original.size.x+.5f, original.size.y+.5f);
+        // Offset을 충돌 처리 Collier와 동기화
+        talkTrigger.offset = original.offset;
+
+        /* 마우스 클릭 영역 트리거 추가 */
+        // Collider 생성
+        BoxCollider2D clickTrigger = gameObject.AddComponent<BoxCollider2D>();
+        // Trigger로 설정
+        clickTrigger.isTrigger = true;
+        // 영역을 스프라이트만큼 설정
+        clickTrigger.size = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x*2f, GetComponent<SpriteRenderer>().bounds.size.y*2f);
         // Offset을 원점으로 설정
-        trigger.offset = new Vector2(0f, 0f);
+        clickTrigger.offset = new Vector2(0f, 0f);
     }
 
     void Update() {
@@ -83,7 +94,7 @@ public class NPC : MonoBehaviour {
 
         // 이 NPC 혹은 네임태그를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
         if(Input.GetMouseButtonDown(0) && hit
-            && (hit.collider.gameObject == gameObject
+            && (hit.collider.gameObject == gameObject && hit.collider.offset == new Vector2(0f, 0f)
             || (GetComponents<Nametag>().Length > 0 && hit.collider.gameObject == GameObject.Find("Nametag/NPC/" + name))))
             if(Collided)
                 GameObject.Find("Dialogue UI").GetComponent<Dialogue>().Talk(this);
