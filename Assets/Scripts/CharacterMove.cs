@@ -199,14 +199,14 @@ public class CharacterMove : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(col.gameObject.GetComponents<NPC>().Length > 0 && col.offset != new Vector2(0f, 0f)) {
+        if(col.gameObject.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.gameObject.name.StartsWith("Poster"))) {
             col.gameObject.GetComponent<NPC>().Collided = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
-        if(col.gameObject.GetComponents<NPC>().Length > 0 && col.offset != new Vector2(0f, 0f)) {
+        if(col.gameObject.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.gameObject.name.StartsWith("Poster"))) {
             col.gameObject.GetComponent<NPC>().Collided = false;
         }
     }
