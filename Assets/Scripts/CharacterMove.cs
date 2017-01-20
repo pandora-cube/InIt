@@ -2,22 +2,24 @@
 using System.Collections;
 
 public class CharacterMove : MonoBehaviour {
-    public float moveSpeed = 3f;    // 이동 속도
-    public int animSpeed = 3;       // 애니메이션 재생 속도
-    public Sprite[] upSprites;      // 상향 이동 스프라이트
-    public Sprite[] downSprites;    // 하향 이동 스프라이트
-    public Sprite[] leftSprites;    // 좌향 이동 스프라이트
-    public Sprite[] rightSprites;   // 우향 이동 스프라이트
-    public bool canmove = true;     // 캐릭터 이동 가능 여부
+    public float moveSpeed = 3f;		// 이동 속도
+    public int animSpeed = 3;			// 애니메이션 재생 속도
+    public Sprite[] upSprites;			// 상향 이동 스프라이트
+    public Sprite[] downSprites;		// 하향 이동 스프라이트
+    public Sprite[] leftSprites;		// 좌향 이동 스프라이트
+    public Sprite[] rightSprites;		// 우향 이동 스프라이트
+    public bool canmove = true;			// 캐릭터 이동 가능 여부
     
-    float backgroundPosX;           // 배경의 X좌표
-    float backgroundPosY;           // 배경의 Y좌표
-    float backgroundWidth;          // 배경의 두께
-    float backgroundHeight;         // 배경의 높이
-    float cameraWidth;              // 화면의 두께
-    float cameraHeight;             // 화면의 높이
-    int animDirection = 1;          // 애니메이션 방향 (0: 상, 1: 하, 2: 좌, 3: 우)
-    int animIndex = 0;              // 애니메이션 재생 인덱스
+    float backgroundPosX;				// 배경의 X좌표
+    float backgroundPosY;				// 배경의 Y좌표
+    float backgroundWidth;				// 배경의 두께
+    float backgroundHeight;				// 배경의 높이
+    float cameraWidth;					// 화면의 두께
+    float cameraHeight;					// 화면의 높이
+    int animDirection = 1;				// 애니메이션 방향 (0: 상, 1: 하, 2: 좌, 3: 우)
+    int animIndex = 0;                  // 애니메이션 재생 인덱스
+	bool touchMoving = false;			// 터치 이동중 여부
+	Vector2 touchMove = new Vector3();	// 터치 이동 목적 좌표
     
 	void Start() {
         // 초기화
@@ -27,15 +29,19 @@ public class CharacterMove : MonoBehaviour {
 	}
 	
 	void Update() {
-        /*
-         *  CharacterMove.Update()
-         *      캐릭터 이동
-         *      화면 이동
-         */
-        
-        // 이동 불가능한 경우
-        if(!canmove) {
+		/*
+		 *  CharacterMove.Update()
+		 *      캐릭터 이동 (조작키)
+		 *      캐릭터 이동 (터치)
+		 *      캐릭터 이동 및 애니메이션 적용
+		 *      캐릭터 좌표 데이터 갱신
+		 *      화면 이동
+		 */
+
+		// 이동 불가능한 경우
+		if(!canmove) {
             GetComponent<Rigidbody2D>().isKinematic = true;
+			touchMoving = false;
             return;
         }
 
@@ -44,71 +50,125 @@ public class CharacterMove : MonoBehaviour {
         // 캐릭터 스프라이트
         SpriteRenderer charspr = GetComponent<SpriteRenderer>();
 
-        /* 캐릭터 이동 */
+        /* 캐릭터 이동 (조작키) */
         float speedX = 0f, speedY = 0f;
         int direction = 1;
         
         // 상향 이동
         if(Input.GetKey(KeyCode.UpArrow)) {
             ismoving = true;
+			touchMoving = false;
             speedY += moveSpeed;
             direction = 0;
         }
         // 하향 이동
         if(Input.GetKey(KeyCode.DownArrow)) {
             ismoving = true;
-            speedY -= moveSpeed;
+			touchMoving = false;
+			speedY -= moveSpeed;
             direction = 1;
         }
         // 좌향 이동
         if(Input.GetKey(KeyCode.LeftArrow)) {
             ismoving = true;
-            speedX -= moveSpeed;
+			touchMoving = false;
+			speedX -= moveSpeed;
             direction = 2;
         }
         // 우향 이동
         if(Input.GetKey(KeyCode.RightArrow)) {
             ismoving = true;
-            speedX += moveSpeed;
+			touchMoving = false;
+			speedX += moveSpeed;
             direction = 3;
         }
-        
-        // 이동중인 경우
-        if(ismoving) {
-            // 정지 해제
-            GetComponent<Rigidbody2D>().isKinematic = false;
-            // 속도 처리
-            GetComponent<Rigidbody2D>().velocity = new Vector3(speedX, speedY, 0f);
-            // 이동 애니메이션 적용
-            SetMoveAnimation(direction);
-        } else {
-            // 정지
-            GetComponent<Rigidbody2D>().isKinematic = true;
+
+		/* 캐릭터 이동 (터치) */
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+
+		// Background 스프라이트를 마우스 왼쪽 혹은 오른쪽 버튼으로 클릭중인 경우
+		if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && hit && hit.collider.name.StartsWith("Background_")) {
+			touchMoving = true;
+			touchMove = hit.point;
+		}
+
+		// 터치 이동중인 경우
+		if(touchMoving) {
+			Vector3 current = transform.position;
+			current.y += GetComponent<BoxCollider2D>().offset.y/2f;
+
+			if(touchMove.x + .1f > current.x && touchMove.x - .1f < current.x
+			&& touchMove.y + .1f > current.y && touchMove.y - .1f < current.y) {
+				// 도착한 경우
+				touchMoving = false;
+			} else {
+				// 도착하지 않은 경우
+				ismoving = true;
+
+				float differX = Mathf.Abs(touchMove.x - current.x);
+				float differY = Mathf.Abs(touchMove.y - current.y);
+				float ratioX = differX < differY ? differX / differY : 1f;
+				float ratioY = differY < differX ? differY / differX : 1f;
+
+				if(touchMove.x > current.x) {			// 목적지가 오른쪽인 경우
+					speedX = moveSpeed * ratioX;
+				} else if(touchMove.x < current.x) {	// 목적지가 왼쪽인 경우
+					speedX = -moveSpeed * ratioX;
+				}
+
+				if(touchMove.y > current.y) {			// 목적지가 윗쪽인 경우
+					speedY = moveSpeed * ratioY;
+				} else if(touchMove.y < current.y) {	// 목적지가 아랫쪽인 경우
+					speedY = -moveSpeed * ratioY;
+				}
+
+				if(ratioX > 1f)
+					Debug.Log("X");
+				if(ratioY > 1f)
+					Debug.Log("Y");
+
+				direction = speedY > 0f ? 0 : 1;
+				direction = speedX < 0f ? 2 : 3;
+			}
+		}
+
+		/* 캐릭터 이동 및 애니메이션 적용 */
+		if(ismoving) { // 이동중인 경우
+			// 정지 해제
+			GetComponent<Rigidbody2D>().isKinematic = false;
+			// 속도 처리
+			GetComponent<Rigidbody2D>().velocity = new Vector3(speedX, speedY, 0f);
+			// 이동 애니메이션 적용
+			SetMoveAnimation(direction);
+		} else {
+			// 정지
+			GetComponent<Rigidbody2D>().isKinematic = true;
 			GetComponent<Rigidbody2D>().velocity = new Vector3(0f, 0f, 0f);
 			// 스프라이트 초기화
 			Sprite sprite;
-            switch(animDirection) {
-                case 0:
-                    sprite = upSprites[0];
-                    break;
-                case 1:
-                    sprite = downSprites[0];
-                    break;
-                case 2:
-                    sprite = leftSprites[0];
-                    break;
-                case 3:
-                    sprite = rightSprites[0];
-                    break;
-                default:
-                    sprite = downSprites[0];
-                    break;
-            }
-            charspr.sprite = sprite;
-        }
+			switch(animDirection) {
+				case 0:
+					sprite = upSprites[0];
+					break;
+				case 1:
+					sprite = downSprites[0];
+					break;
+				case 2:
+					sprite = leftSprites[0];
+					break;
+				case 3:
+					sprite = rightSprites[0];
+					break;
+				default:
+					sprite = downSprites[0];
+					break;
+			}
+			charspr.sprite = sprite;
+		}
 
-        // 캐릭터 좌표 데이터 갱신
-        PlayerData.Player.Position = new float[3] {
+		/* 캐릭터 좌표 데이터 갱신 */
+		PlayerData.Player.Position = new float[3] {
             charspr.transform.position.x,
             charspr.transform.position.y,
             charspr.transform.position.z
