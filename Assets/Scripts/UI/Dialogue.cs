@@ -143,7 +143,9 @@ public class Dialogue : MonoBehaviour {
                     poster.localScale = new Vector3(1f, 1f, 1f);
                 } else if(message == "End") {   // 엔딩 실행 명령인 경우
                     GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
-                    GameObject.Find("Ending").GetComponent<Ending>().Run();
+					GameObject.Find("Character").GetComponent<Rigidbody2D>().isKinematic = true;
+					GameObject.Find("Character").GetComponent<Rigidbody2D>().velocity = new Vector3(0f, 0f, 0f);
+					GameObject.Find("Ending").GetComponent<Ending>().Run();
                 } else {
                     // 메시지 중 뒤집기 명령이 포함되어 있는 경우
                     if(message.Contains("{Flip}")) {
@@ -233,5 +235,7 @@ public class Dialogue : MonoBehaviour {
 
         // 캐릭터 이동 불가능
         GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
-    }
+		GameObject.Find("Character").GetComponent<Rigidbody2D>().isKinematic = true;
+		GameObject.Find("Character").GetComponent<Rigidbody2D>().velocity = new Vector3(0f, 0f, 0f);
+	}
 }

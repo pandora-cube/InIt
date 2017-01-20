@@ -84,8 +84,9 @@ public class CharacterMove : MonoBehaviour {
         } else {
             // 정지
             GetComponent<Rigidbody2D>().isKinematic = true;
-            // 스프라이트 초기화
-            Sprite sprite;
+			GetComponent<Rigidbody2D>().velocity = new Vector3(0f, 0f, 0f);
+			// 스프라이트 초기화
+			Sprite sprite;
             switch(animDirection) {
                 case 0:
                     sprite = upSprites[0];

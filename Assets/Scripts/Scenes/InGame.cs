@@ -57,7 +57,9 @@ public class InGame : MonoBehaviour {
 
                     // 캐릭터 이동 불가
                     GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
-                } else {
+					GameObject.Find("Character").GetComponent<Rigidbody2D>().isKinematic = true;
+					GameObject.Find("Character").GetComponent<Rigidbody2D>().velocity = new Vector3(0f, 0f, 0f);
+				} else {
                     Resume();
                 }
         }
