@@ -156,24 +156,31 @@ public class NPC : MonoBehaviour {
                 SpriteRenderer sprite = GetComponent<SpriteRenderer>();                                     // NPC Sprite
                 Vector2 speed = new Vector2(0f, 0f);                                                        // X, Y 속도
 
-                if((destination.x+.25f > current.x && destination.x-.25f < current.x || destination.x == 256f)
-                    && (destination.y+.25f > current.y && destination.y-.25f < current.y || destination.y == 256f))
+                if((destination.x+.1f > current.x && destination.x-.1f < current.x || destination.x == 256f)
+                    && (destination.y+.1f > current.y && destination.y-.1f < current.y || destination.y == 256f))
                     OnCommandEnd();
                 else {
-                    if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
+					float differX = Mathf.Abs(destination.x - current.x);
+					float differY = Mathf.Abs(destination.y - current.y);
+					float ratioX = differX < differY ? differX / differY : 1f;
+					float ratioY = differY < differX ? differY / differX : 1f;
+
+					if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
+
                     } else if(destination.x > current.x) {  // 목적지가 오른쪽인 경우
                         sprite.flipX = false;
-                        speed.x = moveSpeed;
+                        speed.x = moveSpeed * ratioX;
                     } else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
                         sprite.flipX = true;
-                        speed.x = -moveSpeed;
+                        speed.x = -moveSpeed * ratioX;
                     }
             
                     if(destination.y == 256f) {             // Y좌표로 이동하지 않는 경우
+
                     } else if(destination.y > current.y) {  // 목적지가 윗쪽인 경우
-                        speed.y = moveSpeed;
+                        speed.y = moveSpeed * ratioY;
                     } else if(destination.y < current.y) {  // 목적지가 아랫쪽인 경우
-                        speed.y = -moveSpeed;
+                        speed.y = -moveSpeed * ratioY;
                     }
         
                     // 정지 해제
