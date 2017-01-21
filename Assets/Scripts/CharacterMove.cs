@@ -252,23 +252,29 @@ public class CharacterMove : MonoBehaviour {
         GetComponent<SpriteRenderer>().sprite = moveSprites[animIndex/animSpeed];
     }
 
-    void OnCollisionStay2D(Collision2D col) {
-        // 출입구 영역에 있는 경우
+	void OnCollisionStay2D(Collision2D col) {
+        // 출입구와 충돌한 경우
         if(col.gameObject.GetComponents<Entrance>().Length > 0) {
             col.gameObject.GetComponent<Entrance>().OnEnter();
-        }
-    }
+			touchMoving = false;
+		}
+
+		// Background와 충돌한 경우
+		if(col.gameObject.name.StartsWith("Background_"))
+			touchMoving = false;
+	}
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(col.gameObject.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.gameObject.name.StartsWith("Poster"))) {
-            col.gameObject.GetComponent<NPC>().Collided = true;
+		// NPC와 충돌한 경우
+        if(col.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.name.StartsWith("Poster"))) {
+            col.GetComponent<NPC>().Collided = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
-        if(col.gameObject.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.gameObject.name.StartsWith("Poster"))) {
-            col.gameObject.GetComponent<NPC>().Collided = false;
+        if(col.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.name.StartsWith("Poster"))) {
+            col.GetComponent<NPC>().Collided = false;
         }
     }
 
