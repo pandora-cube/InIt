@@ -156,10 +156,13 @@ public class NPC : MonoBehaviour {
                 SpriteRenderer sprite = GetComponent<SpriteRenderer>();                                     // NPC Sprite
                 Vector2 speed = new Vector2(0f, 0f);                                                        // X, Y 속도
 
-                if((destination.x+.1f > current.x && destination.x-.1f < current.x || destination.x == 256f)
-                    && (destination.y+.1f > current.y && destination.y-.1f < current.y || destination.y == 256f))
-                    OnCommandEnd();
-                else {
+				if((destination.x + .1f > current.x && destination.x - .1f < current.x || destination.x == 256f)
+					&& (destination.y + .1f > current.y && destination.y - .1f < current.y || destination.y == 256f)) {
+					// OnCommandEnd 콜백 호출
+					OnCommandEnd();
+					// 캐릭터와의 충돌 무시하지 않음
+					Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), GameObject.Find("Character").GetComponent<BoxCollider2D>(), false);
+				} else {
 					float differX = Mathf.Abs(destination.x - current.x);
 					float differY = Mathf.Abs(destination.y - current.y);
 					float ratioX = differX < differY ? differX / differY : 1f;
@@ -167,34 +170,36 @@ public class NPC : MonoBehaviour {
 
 					if(destination.x == 256f) {             // X좌표로 이동하지 않는 경우
 
-                    } else if(destination.x > current.x) {  // 목적지가 오른쪽인 경우
-                        sprite.flipX = false;
-                        speed.x = moveSpeed * ratioX;
-                    } else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
-                        sprite.flipX = true;
-                        speed.x = -moveSpeed * ratioX;
-                    }
-            
-                    if(destination.y == 256f) {             // Y좌표로 이동하지 않는 경우
+					} else if(destination.x > current.x) {  // 목적지가 오른쪽인 경우
+						sprite.flipX = false;
+						speed.x = moveSpeed * ratioX;
+					} else if(destination.x < current.x) {  // 목적지가 왼쪽인 경우
+						sprite.flipX = true;
+						speed.x = -moveSpeed * ratioX;
+					}
 
-                    } else if(destination.y > current.y) {  // 목적지가 윗쪽인 경우
-                        speed.y = moveSpeed * ratioY;
-                    } else if(destination.y < current.y) {  // 목적지가 아랫쪽인 경우
-                        speed.y = -moveSpeed * ratioY;
-                    }
-        
-                    // 정지 해제
-                    GetComponent<Rigidbody2D>().isKinematic = false;
-                    // 속도 처리
-                    GetComponent<Rigidbody2D>().velocity = new Vector3(speed.x, speed.y, 0f);
+					if(destination.y == 256f) {             // Y좌표로 이동하지 않는 경우
 
-                    // 이동 애니메이션 인덱스 처리
-                    animIndex++;
-                    if(animIndex/animSpeed >= movingSprites.Length)
-                        animIndex = 0;
-                    // 이동 스프라이트 이미지로 전환
-                    sprite.sprite = movingSprites[animIndex/animSpeed];
-                }
+					} else if(destination.y > current.y) {  // 목적지가 윗쪽인 경우
+						speed.y = moveSpeed * ratioY;
+					} else if(destination.y < current.y) {  // 목적지가 아랫쪽인 경우
+						speed.y = -moveSpeed * ratioY;
+					}
+
+					// 정지 해제
+					GetComponent<Rigidbody2D>().isKinematic = false;
+					// 속도 처리
+					GetComponent<Rigidbody2D>().velocity = new Vector3(speed.x, speed.y, 0f);
+
+					// 이동 애니메이션 인덱스 처리
+					animIndex++;
+					if(animIndex / animSpeed >= movingSprites.Length)
+						animIndex = 0;
+					// 이동 스프라이트 이미지로 전환
+					sprite.sprite = movingSprites[animIndex / animSpeed];
+					// 캐릭터와의 충돌 무시
+					Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), GameObject.Find("Character").GetComponent<BoxCollider2D>());
+				}
                 break;
             // 일정 시간동안 정지
             case "Stop":
