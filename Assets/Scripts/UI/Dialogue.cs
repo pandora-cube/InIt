@@ -58,8 +58,10 @@ public class Dialogue : MonoBehaviour {
     }
 
     public void OnClick() {
-        if(contactedNPC != null)
-            Talk(contactedNPC);
+		if(contactedNPC != null)
+			Talk(contactedNPC);
+		else
+			HideDialogue();
     }
 
     NPC FindContactNPC() {
