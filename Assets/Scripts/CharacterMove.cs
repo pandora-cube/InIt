@@ -89,6 +89,7 @@ public class CharacterMove : MonoBehaviour {
 
 		// Background 스프라이트를 마우스 왼쪽 혹은 오른쪽 버튼으로 클릭중인 경우
 		if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && hit &&
+			(hit.collider.name.StartsWith("Background_") || hit.collider.tag == "NPC" || hit.collider.tag == "Entrance")) {
 			touchMoving = true;
 			touchMove = hit.point;
 		}
