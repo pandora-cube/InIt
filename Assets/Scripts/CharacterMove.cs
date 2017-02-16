@@ -88,7 +88,7 @@ public class CharacterMove : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 
 		// Background 스프라이트를 마우스 왼쪽 혹은 오른쪽 버튼으로 클릭중인 경우
-		if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && hit && hit.collider.name.StartsWith("Background_")) {
+		if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && hit &&
 			touchMoving = true;
 			touchMove = hit.point;
 		}
@@ -266,14 +266,14 @@ public class CharacterMove : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col) {
 		// NPC와 충돌한 경우
-        if(col.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.name.StartsWith("Poster"))) {
+		if(col.GetComponents<NPC>().Length > 0 && (col == col.GetComponent<NPC>().talkTrigger || col.name.StartsWith("Poster"))) {
             col.GetComponent<NPC>().Collided = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
         // NPC와의 충돌에서 빠져나온 경우
-        if(col.GetComponents<NPC>().Length > 0 && (col.offset != new Vector2(0f, 0f) || col.name.StartsWith("Poster"))) {
+        if(col.GetComponents<NPC>().Length > 0 && (col == col.GetComponent<NPC>().talkTrigger || col.name.StartsWith("Poster"))) {
             col.GetComponent<NPC>().Collided = false;
         }
     }

@@ -23,8 +23,10 @@ public class NPC : MonoBehaviour {
     public string preStageMessage = "나 말고 다른 사람한테 먼저 가봐.";
     // 적정 스테이지 후에 대화 시도 시 출력할 메시지
     public string afterStageMessage = "난 이제 해 줄 말이 없어.";
+	public BoxCollider2D clickTrigger;  // 마우스 클릭 영역 트리거
+	public BoxCollider2D talkTrigger;	// 대화 가능 영역 트리거
 
-    bool eventReservated = false;       // 명령 종료 이벤트 예약 여부
+	bool eventReservated = false;       // 명령 종료 이벤트 예약 여부
     bool Executed = false;              // 명령 이행 여부
     int commandIndex = 0;               // 현재 이행한 명령 인덱스
     Sprite standingSprite;              // 정지상태 스프라이트
@@ -41,28 +43,26 @@ public class NPC : MonoBehaviour {
         /* 초기화 */
         standingSprite = GetComponent<SpriteRenderer>().sprite;
 
-        /* 대화 가능 영역 트리거 추가 */
-        // 기존에 존재하던 충돌 처리 용도의 BoxCollider2D
-        BoxCollider2D original = GetComponent<BoxCollider2D>();
+		/* 마우스 클릭 영역 트리거 추가 */
+		// Collider 생성
+		clickTrigger = gameObject.AddComponent<BoxCollider2D>();
+		// Trigger로 설정
+		clickTrigger.isTrigger = true;
+		// 영역을 스프라이트만큼 설정
+		clickTrigger.size = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x*2f, GetComponent<SpriteRenderer>().bounds.size.y*2f);
+		// Offset을 원점으로 설정
+		clickTrigger.offset = new Vector2(0f, 0f);
+
+		/* 대화 가능 영역 트리거 추가 */
         // 대화 가능 영역 검사 용도의 Collider 생성
-        BoxCollider2D talkTrigger = gameObject.AddComponent<BoxCollider2D>();
+        talkTrigger = gameObject.AddComponent<BoxCollider2D>();
         // Trigger로 설정
         talkTrigger.isTrigger = true;
-        // 영역을 충돌 처리 Collider보다 크게 설정
-        talkTrigger.size = new Vector2(original.size.x+.5f, original.size.y+.5f);
-        // Offset을 충돌 처리 Collier와 동기화
-        talkTrigger.offset = original.offset;
-
-        /* 마우스 클릭 영역 트리거 추가 */
-        // Collider 생성
-        BoxCollider2D clickTrigger = gameObject.AddComponent<BoxCollider2D>();
-        // Trigger로 설정
-        clickTrigger.isTrigger = true;
-        // 영역을 스프라이트만큼 설정
-        clickTrigger.size = new Vector2(GetComponent<SpriteRenderer>().bounds.size.x*2f, GetComponent<SpriteRenderer>().bounds.size.y*2f);
-        // Offset을 원점으로 설정
-        clickTrigger.offset = new Vector2(0f, 0f);
-    }
+        // 영역을 마우스 클릭 영역 트리거보다 크게 설정
+        talkTrigger.size = new Vector2(clickTrigger.size.x+3f, clickTrigger.size.y+3f);
+		// Offset을 원점으로 설정
+		talkTrigger.offset = new Vector2(0f, 0f);
+	}
 
     void Update() {
         /*
@@ -92,14 +92,14 @@ public class NPC : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 
-        // 이 NPC 혹은 네임태그를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
-        if(Input.GetMouseButtonDown(0) && hit
-            && (hit.collider.gameObject == gameObject && hit.collider.offset == new Vector2(0f, 0f)
-            || (GetComponents<Nametag>().Length > 0 && hit.collider.gameObject == GameObject.Find("Nametag/NPC/" + name))))
-            if(Collided)
-                GameObject.Find("Dialogue UI").GetComponent<Dialogue>().Talk(this);
-            else if(GetComponents<Nametag>().Length > 0)
-                GetComponent<Nametag>().SetNametagText("너무 멉니다");
+		// 이 NPC 혹은 네임태그를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
+		if(Input.GetMouseButtonDown(0) && hit
+			&& ((hit.collider == clickTrigger && hit.collider.gameObject == gameObject)
+			|| (GetComponents<Nametag>().Length > 0 && hit.collider.gameObject == GameObject.Find("Nametag/NPC/" + name))))
+			if(Collided)
+				GameObject.Find("Dialogue UI").GetComponent<Dialogue>().Talk(this);
+			else if(GetComponents<Nametag>().Length > 0)
+				GetComponent<Nametag>().SetNametagText("너무 멉니다");
     }
 
     void OnCollisionEnter2D(Collision2D col) {
