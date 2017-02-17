@@ -124,14 +124,23 @@ public class CharacterMove : MonoBehaviour {
 				} else if(touchMove.y < current.y) {	// 목적지가 아랫쪽인 경우
 					speedY = -moveSpeed * ratioY;
 				}
-
-				if(ratioX > 1f)
-					Debug.Log("X");
-				if(ratioY > 1f)
-					Debug.Log("Y");
-
-				direction = speedY > 0f ? 0 : 1;
-				direction = speedX < 0f ? 2 : 3;
+				
+				// 0: Up, 1: Down, 2: Left, 3: Right
+				float angle = Mathf.Atan2(speedY, speedX) * 180f / Mathf.PI;
+				if(angle >= 0f && angle < 45f)
+					direction = 3;
+				else if(angle >= 45f && angle < 135f)
+					direction = 0;
+				else if(angle >= 135f && angle <= 180f)
+					direction = 2;
+				else if(angle < 0f && angle > -45f)
+					direction = 3;
+				else if(angle <= -45f && angle > -135f)
+					direction = 1;
+				else if(angle <= -135f && angle >= -180f)
+					direction = 2;
+				else
+					direction = 1;
 			}
 		}
 
