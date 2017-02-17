@@ -126,21 +126,27 @@ public class CharacterMove : MonoBehaviour {
 				}
 				
 				// 0: Up, 1: Down, 2: Left, 3: Right
-				float angle = Mathf.Atan2(speedY, speedX) * 180f / Mathf.PI;
-				if(angle >= 0f && angle < 45f)
-					direction = 3;
-				else if(angle >= 45f && angle < 135f)
-					direction = 0;
-				else if(angle >= 135f && angle <= 180f)
-					direction = 2;
-				else if(angle < 0f && angle > -45f)
-					direction = 3;
-				else if(angle <= -45f && angle > -135f)
-					direction = 1;
-				else if(angle <= -135f && angle >= -180f)
-					direction = 2;
-				else
-					direction = 1;
+				int angle = Mathf.FloorToInt((Mathf.Atan2(speedY, speedX) * 180f / Mathf.PI - 45f) / 90f) + 3;
+				switch(angle) {
+					case 0:
+						direction = 2;  // Left
+						break;
+					case 1:
+						direction = 1;  // Down
+						break;
+					case 2:
+						direction = 3;  // Right
+						break;
+					case 3:
+						direction = 0;  // Up
+						break;
+					case 4:
+						direction = 2;  // Left
+						break;
+					default:
+						direction = 1;	// Down
+						break;
+				}
 			}
 		}
 
