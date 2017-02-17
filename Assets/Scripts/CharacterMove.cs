@@ -89,7 +89,8 @@ public class CharacterMove : MonoBehaviour {
 
 		// Background 스프라이트를 마우스 왼쪽 혹은 오른쪽 버튼으로 클릭중인 경우
 		if((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && hit &&
-			(hit.collider.name.StartsWith("Background_") || hit.collider.tag == "NPC" || hit.collider.tag == "Entrance")) {
+			(hit.collider.name.StartsWith("Background_") || hit.collider.name.StartsWith("TalkZone/") ||
+			hit.collider.tag == "NPC" || hit.collider.tag == "Entrance")) {
 			touchMoving = true;
 			touchMove = hit.point;
 		}
@@ -266,18 +267,23 @@ public class CharacterMove : MonoBehaviour {
 	}
 
     void OnTriggerEnter2D(Collider2D col) {
-		// NPC와 충돌한 경우
-		if(col.GetComponents<NPC>().Length > 0 && (col == col.GetComponent<NPC>().talkTrigger || col.name.StartsWith("Poster"))) {
+		// NPC 대화 가능 영역 진입
+		if(col.name.StartsWith("TalkZone/")) {
+			NPC npc = GameObject.Find(col.name.Split('/')[1]).GetComponent<NPC>();
+			npc.Collided = true;
+		}
+		if(col.GetComponents<NPC>().Length > 0 && (col.gameObject.name == "TalkZone/" + col.name || col.name.StartsWith("Poster"))) {
             col.GetComponent<NPC>().Collided = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D col) {
-        // NPC와의 충돌에서 빠져나온 경우
-        if(col.GetComponents<NPC>().Length > 0 && (col == col.GetComponent<NPC>().talkTrigger || col.name.StartsWith("Poster"))) {
-            col.GetComponent<NPC>().Collided = false;
-        }
-    }
+		// NPC 대화 가능 영역 퇴장
+		if(col.name.StartsWith("TalkZone/")) {
+			NPC npc = GameObject.Find(col.name.Split('/')[1]).GetComponent<NPC>();
+			npc.Collided = false;
+		}
+	}
 
     string GetPlayerArea() {
         // 캐릭터 좌표

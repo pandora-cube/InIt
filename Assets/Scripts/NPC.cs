@@ -24,24 +24,25 @@ public class NPC : MonoBehaviour {
     // 적정 스테이지 후에 대화 시도 시 출력할 메시지
     public string afterStageMessage = "난 이제 해 줄 말이 없어.";
 	public BoxCollider2D clickTrigger;  // 마우스 클릭 영역 트리거
-	public BoxCollider2D talkTrigger;	// 대화 가능 영역 트리거
+	public GameObject talkZonePrefab;	// 대화 가능 영역 오브젝트 프리팹
 
 	bool eventReservated = false;       // 명령 종료 이벤트 예약 여부
     bool Executed = false;              // 명령 이행 여부
     int commandIndex = 0;               // 현재 이행한 명령 인덱스
     Sprite standingSprite;              // 정지상태 스프라이트
     int animIndex = 0;                  // 애니메이션 재생 인덱스
+	GameObject talkZone;				// 대화 가능 영역 오브젝트
 
-    void Start() {
-        /*
+	void Start() {
+		/*
          *  NPC.Start()
          *      초기화
-         *      대화 가능 영역 트리거 추가
          *      마우스 클릭 영역 트리거 추가
+         *      대화 가능 영역 검사 오브젝트
          */
-        
-        /* 초기화 */
-        standingSprite = GetComponent<SpriteRenderer>().sprite;
+
+		/* 초기화 */
+		standingSprite = GetComponent<SpriteRenderer>().sprite;
 
 		/* 마우스 클릭 영역 트리거 추가 */
 		// Collider 생성
@@ -53,15 +54,19 @@ public class NPC : MonoBehaviour {
 		// Offset을 원점으로 설정
 		clickTrigger.offset = new Vector2(0f, 0f);
 
-		/* 대화 가능 영역 트리거 추가 */
-        // 대화 가능 영역 검사 용도의 Collider 생성
-        talkTrigger = gameObject.AddComponent<BoxCollider2D>();
+		/* 대화 가능 영역 스프라이트 및 트리거 추가 */
+		// 대화 가능 영역 검사 용도의 오브젝트 생성
+		talkZone = Instantiate(talkZonePrefab);
+		// 이름 설정
+		talkZone.name = "TalkZone/" + gameObject.name;
+        // Collider 선택
+        BoxCollider2D talkTrigger = talkZone.GetComponent<BoxCollider2D>();
         // Trigger로 설정
         talkTrigger.isTrigger = true;
         // 영역을 마우스 클릭 영역 트리거보다 크게 설정
         talkTrigger.size = new Vector2(clickTrigger.size.x+3f, clickTrigger.size.y+3f);
-		// Offset을 원점으로 설정
-		talkTrigger.offset = new Vector2(0f, 0f);
+		// 스케일 동기화
+		talkZone.transform.localScale = transform.localScale;
 	}
 
     void Update() {
@@ -69,6 +74,7 @@ public class NPC : MonoBehaviour {
          *  NPC.Update()
          *      레벨에 따른 네임태그 강조
          *      명령 이행
+		 *      대화 가능 영역 업데이트
          *      대화
          */
 
@@ -88,10 +94,12 @@ public class NPC : MonoBehaviour {
         if(Executed && Commands.Length > commandIndex)
             OnCommandUpdate();
 
-        /* 대화 */
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+		/* 대화 가능 영역 업데이트 */
+		talkZone.transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
 
+		/* 대화 */
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 		// 이 NPC 혹은 네임태그를 마우스 왼쪽 버튼으로 클릭하였으며 대화 가능 영역 내부에 있는 경우
 		if(Input.GetMouseButtonDown(0) && hit
 			&& ((hit.collider == clickTrigger && hit.collider.gameObject == gameObject)
