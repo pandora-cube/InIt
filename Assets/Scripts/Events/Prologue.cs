@@ -17,6 +17,7 @@ public class Prologue : MonoBehaviour {
     void Update() {
         switch(Step) {
             case 1:
+				GameObject.Find("Character").GetComponent<CharacterMove>().canmove = false;
                 transform.localScale = new Vector3(1f, 1f, 1f);
                 canvas.FindChild("Background").GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                 canvas.FindChild("1").GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);

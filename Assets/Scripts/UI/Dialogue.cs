@@ -86,7 +86,7 @@ public class Dialogue : MonoBehaviour {
     }
 
     public void Talk(NPC npc) {
-        if(talkToggle)
+        if(talkToggle || GameObject.Find("Prologue").transform.localScale == new Vector3(1f, 1f, 1f))
             return;
         talkToggle = true;
         Invoke("ToggleTalk", .25f);
